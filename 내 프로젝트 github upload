@@ -1,0 +1,78 @@
+내 프로젝트 github upload
+
+1. github repository 생성
+	https://github.com/madcow95 접속
+	New repository
+
+2. local 폴더 repository 선언
+= local repository 만들기
+	local 폴더에서 git bash here
+
+	git init(initial) 
+
+	하면 폴더에 .git 이라는 폴더가 생긴다.
+
+3. config 설정
+= local repository와 remote repository의 권한, 보안 설정
+	git bash 창에서
+
+	git config --local user.name madcow95
+	git config --local user.email lobasketve@naver.com
+
+4. remote 설정
+	
+	upload할 remote repository주소 별명 설정
+	git remote add origin https://github.com/madcow95/Biz_2021_01_403_java.git
+	-> github 사이트에 있는거 복사, 붙여넣기
+	git bash 창에서 붙여넣기는 shift + insert (리눅스 명령어)
+
+cf) github 업로드 금지 설정
+로컬 폴더에 .gitignore 파일 생성 (윈도우에서 못만들어서 리눅스 명령어로 사용)
+git bash 창에서 touch .gitignore
+하면 local 폴더에 .gitignore 파일이 생김
+이 파일을 우클릭 sublime text에서 아래 목록들 작성
+
+
+업로드 금지 목록 작성
+# 설정폴더(업로드 제외할 폴더 이름 쓰고 뒤에 / 붙이기)
+.metadata/
+.settings/
+bin/
+
+# 자동생성파일
+*.class
+*.jar
+*.war
+*.ear
+
+# 임시생성파일
+tmp/
+*.tmp
+*.bak
+*.swp
+
+# 가상머신 오류 로그
+hs_err_pid*
+
+# eclipse 임시 설정
+*.launch
+
+cf) /는 폴더 뒤에만 붙이기
+
+5. 파일 add
+
+		git add .
+
+		= 현재 폴더의 모든 파일, 폴더를 upload 하기 위해서 압축해라.
+
+6. commit 설정
+	현재 시점에 업로드한 정보의 comment를 설정하는 것
+
+	git commit -m first
+
+
+7. push
+
+	git push -u origin master
+
+하고 github 사이트 들어가서 정상적으로 업로드 되었는지 확인
