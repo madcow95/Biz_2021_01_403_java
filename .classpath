@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="Hello/src/|Java_001/src/|Java_003/src/|Java_004/src/|Java_Hello/src/" kind="src" path=""/>
+	<classpathentry kind="src" path="Hello/src"/>
+	<classpathentry kind="src" path="Java_001/src"/>
+	<classpathentry kind="src" path="Java_003/src"/>
+	<classpathentry kind="src" path="Java_004/src"/>
+	<classpathentry kind="src" path="Java_Hello/src"/>
+	<classpathentry kind="output" path="Hello/bin"/>
+</classpath>
