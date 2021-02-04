@@ -11,6 +11,7 @@ public class Var_03 {
 		int intDan = 7;
 		int num1 = 1;
 		
+		num1 += 1;
 		System.out.print(intDan);
 		System.out.print(" x ");
 		System.out.print(num1);

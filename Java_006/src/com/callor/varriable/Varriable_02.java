@@ -18,7 +18,6 @@ public class Varriable_02 {
 		int result3 = 0;
 		int result4 = 0;
 		int result5 = 0;
-		int result6 = 0;
 		
 		// 연산결과를 변수에 저장하기
 		result1 = num1 + num2;
