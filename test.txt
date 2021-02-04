@@ -1,0 +1,11 @@
+Republic Of Korea
+
+:wq
+
+public static void main(String args[]); {
+
+
+
+}
+
+Welcome man
