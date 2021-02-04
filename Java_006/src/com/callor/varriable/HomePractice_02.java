@@ -16,8 +16,12 @@ public class HomePractice_02 {
 			
 			System.out.println(intDan + " x " + num1 + " = " + intDan * num1 );
 		}
-		
-		System.out.println();			
+		/*
+		 * num1 = 9네? 0보다 크네? ㅇㅋ 내려가 연산 다 하고 Console에 출력했어 -1해야되네? 했어 이제 num1 은 8이야 이거도 0보다 크네? ㅇㅋ 내려가 ~~~ 
+		 * 이제 num1 = 1이야 -1해야되네? 했어 이제 num1 = 0이야 이제 포함안되네? ㅇㅋ 루프 끝 다음 
+		 * 요런 느낌으로 진행된다
+		 */
+			System.out.println();			
 		for(num1 = 9 ;0 < num1 ; num1 -= 1) {
 			intDan = 8;
 				
