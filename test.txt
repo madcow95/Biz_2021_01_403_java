@@ -1,11 +1,19 @@
-Republic Of Korea
+public static void main(String args[]){
 
-:wq
+	int num1 = 0;
+	int num2 = 0;
+	
+	int result1 = 0;
+	int result2 = 0;
 
-public static void main(String args[]); {
+	num1 = 10;
+	num2 = 20;
 
+	result 1 = num1 + num2;
+	result 2 = num1 * num2;
 
+	System.out.println(result1);
+	System.out.println(result2);
 
 }
-
-Welcome man
+그냥 흔한 두 수의 덧셈과 곱셈을 해서 Console에 보여주라는 뜻이다.
