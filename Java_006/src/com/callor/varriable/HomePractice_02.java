@@ -17,8 +17,7 @@ public class HomePractice_02 {
 			System.out.println(intDan + " x " + num1 + " = " + intDan * num1 );
 		}
 		
-		System.out.println();
-			
+		System.out.println();			
 		for(num1 = 9 ;0 < num1 ; num1 -= 1) {
 			intDan = 8;
 				
@@ -31,6 +30,7 @@ public class HomePractice_02 {
 				
 			System.out.println(intDan + " x " + num1 + " = " + intDan * num1 );
 		}	
+		
 		System.out.println();
 		for(num1 = 9 ; 0 < num1 ; num1 -= 1) {
 			intDan = 6;
