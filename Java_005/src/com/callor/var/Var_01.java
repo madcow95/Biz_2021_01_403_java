@@ -25,6 +25,8 @@ public class Var_01 {
 		int engScore = 100;
 		int mathScore = 95;
 		
+		System.out.println((korScore + engScore + mathScore) / 3);
+		
 		// 2개 이상의 단어로 조합이 다소 불편할때
 		// 변수명 접두사로 변수의 형(type)을 붙인다.
 		// 헝가리언 표기법
@@ -35,8 +37,12 @@ public class Var_01 {
 		float floatNum1 = 20.0F;
 		float fNum2 = 30.0F;
 		
+		System.out.println(floatNum1);
+		
 		double doNum1 = 20.0;
 		double doNum2 = 30.0;
+		
+		System.out.println(doNum1);
 		
 		String strName = "홍길동";
 		String strNation = "대한민국";

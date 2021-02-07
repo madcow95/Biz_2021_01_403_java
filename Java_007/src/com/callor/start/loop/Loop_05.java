@@ -5,7 +5,9 @@ public class Loop_05 {
 	public static void main(String args[]) {
 		
 		int intSum = 0;
+		
 		for(int i = 0 ; i < 10 ; i += 2) {
+			
 			intSum += (i + 1);
 			// 여기 끝난 후 intSum 값이 사라지는게 아니라 저장이 되어서 다음 loop 때도 남아서 같이 계산
 			

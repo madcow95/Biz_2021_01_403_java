@@ -23,7 +23,7 @@ public class pay_01 {
 				if(sw > 0) {
 					paper = paper / 2;
 				}
-				sw *=(-1);
+				sw *= (-1);
 			
 				// 최초에는 sw가 -1이다가 두번째 for()반복문을 시작하기전에
 				// -1을 곱하여 sw를 1로 만든다.

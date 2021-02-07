@@ -10,11 +10,13 @@ public class pay_02 {
 		int count = 0;
 		
 		int sw = -1;
+		
 		for(; pay > 0 ;) {
 			
 			count = pay / paper;
 			pay -= (paper * count);
 			System.out.println(paper + "원권" + count);
+			
 				if(sw < 0) { // sw가 0보다 작으면
 					paper = paper / 5;
 				}

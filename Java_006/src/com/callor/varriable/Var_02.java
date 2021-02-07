@@ -7,14 +7,20 @@ public class Var_02 {
 		int num1 = 0;
 		
 		num1 = num1 + 10;
+		System.out.println(num1);
 		num1 =+ 10;
+		System.out.println(num1);
 		num1 += 10;
+		System.out.println(num1);
 		
 		num1 = num1 - 10;
 		num1 =- 10;
+		System.out.println(num1);
 		num1 -= 10;
+		System.out.println(num1);
 		
 		num1 = num1 * 10;
+		System.out.println(num1);
 		num1 *= 10;
 		
 		num1 = num1 / 10;

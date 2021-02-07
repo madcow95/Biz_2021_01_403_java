@@ -12,14 +12,14 @@ public class Var_02 {
 		// intNum1 = 0;
 		
 		int intNum1 = 30;
-		System.out.println("int intNum1 = 30; " + intNum1);
+		System.out.println("int intNum1 = 30 " + intNum1);
 		
 		intNum1 = 50;
-		System.out.println("intNum1 = 50; " + intNum1);
+		System.out.println("intNum1 = 50 " + intNum1);
 		
 		// 숫자(정수, 실수)형 변수에 0을 저장하는 것은 변수를 clear 하라는 것이다.
 		intNum1 = 0;
-		System.out.println("intNum1 = 0; " + intNum1);
+		System.out.println("intNum1 = 0 " + intNum1);
 		
 		// 정수형변수 intNum2를 선언"만" 해라
 		int intNum2;

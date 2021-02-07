@@ -26,8 +26,12 @@ public class VarInteger_01 {
 		// 변수 intNum1에 정수형 값 50을 저장해라
 		// 선언된 변수에 값을 새로 입력하면 전에 있던 값은 무조건 clear된다.
 		intNum1 = 20;
+		System.out.println(intNum1 + intNum2);
 		intNum1 = 50;
+		System.out.println(intNum1 + intNum2);
 		intNum2 = 20;
+		
+		System.out.println(intNum1 + intNum2);
 		
 	}
 	
