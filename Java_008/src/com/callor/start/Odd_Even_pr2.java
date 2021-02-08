@@ -4,22 +4,25 @@ public class Odd_Even_pr2 {
 	
 	public static void main(String args[]) {
 		
-		int Dan = 2;
 		int i = 0;
-		int i2 = 0;
-		int x = 0;
-		
-		for(i = 1 ; i < 10 ; i++) {
-			i2 = i;					
-			x = Dan * i2;
-			System.out.println(x);
+		int intSum = 0;
+		int intSum1 = 0;
+		for(i = 0 ; i < 100 ; i++) {
+			int i2 = (1 + i);
+			boolean bYes = i2 % 2 == 0;
 			
-			Dan = 3;
-			System.out.println(x);
-		
+			if(bYes) {
+				intSum += i2;
+				}
+			
+			else{
+				
+				intSum1 += i;
+				}
+			
 		}
-		
-		
+		System.out.println(intSum);
+		System.out.println(intSum1);
 	}
 
 }

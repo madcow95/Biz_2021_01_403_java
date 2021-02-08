@@ -7,9 +7,7 @@ public class Multiple_01 {
 		int intSum = 0;
 		
 		for(int i = 0 ; i < 100 ; i++) {
-			int i2 = 0;
-			
-			i2 = (i + 7);
+			int i2 = (i + 7);
 			
 			if(i2 % 3 == 0) {
 				System.out.println(i2 + "는 3의배수");
