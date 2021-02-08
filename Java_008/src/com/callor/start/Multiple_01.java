@@ -8,8 +8,9 @@ public class Multiple_01 {
 		
 		for(int i = 0 ; i < 100 ; i++) {
 			int i2 = (i + 7);
-			
-			if(i2 % 3 == 0) {
+			boolean bYes = i2 % 3 == 0;
+			// if(i2 % 3 == 0) {
+			if(bYes) {
 				System.out.println(i2 + "는 3의배수");
 				
 				intSum += i2;
