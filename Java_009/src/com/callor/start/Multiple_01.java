@@ -16,9 +16,10 @@ public class Multiple_01 {
 			
 			// 3의 배수이면서(and) 9의 배수
 			if(bYes1 && bYes2) {
-				intSum += i2;
-				System.out.println(intSum + "는 3과 9의 배수");
+				intSum = i2;
+				System.out.println(intSum + "는 3과 9의 배수");				
 			}
+			intSum += i2;
 		}
 		System.out.println(intSum + "는 3과 9의 배수의 합");
 		
