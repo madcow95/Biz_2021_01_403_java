@@ -4,7 +4,6 @@ public class Multiple_01 {
 	
 	public static void main(String args[]) {
 		
-		int intNum = 0;
 		int i2 = 0;
 		int intSum = 0;
 		

@@ -1,6 +1,5 @@
 package com.callor.start.jdk.keyinput;
 
-import java.util.Random;
 import java.util.Scanner;
 
 /*
@@ -21,37 +20,27 @@ public class LopingGame2 {
 	
 	public static void main(String args[]) {
 		
-		Random rnd = new Random();
 		Scanner scan = new Scanner(System.in);
 		
-		int rndNum = 0;
 		int a = 0;
 		int b = 0;
 		int c = 0;
-		while(true) {
-			a = 1;
-			b = 2;
-			c = 3;
-			rndNum = (a,b,c); 
-			
-			System.out.print("숫자입력 (-1 : Quit) >> ");
-			int keyNum = scan.nextInt();
-			
-			if(keyNum == 150) {
-				System.out.println(rndNum);
-			}
-			if(rndNum > 100) {
-				
-				
-			}
-				
+		
+		System.out.print("Press Number >> ");
+		int num = scan.nextInt();
+		a = 1;
+		b = 2;
+		c = 3;
+		
+			if(a % 1 == 0) {
+				System.out.print("Strike");
 			}
 			
-			
-			
-			
-		}// while() end
-		System.out.println("GAME OVER");
+			if(b % 2 == 0) {
+				System.out.println("Strike");
+			}
+			// 못하겠다 야구게임 만드는거는	
+		
 	}
 
 }
