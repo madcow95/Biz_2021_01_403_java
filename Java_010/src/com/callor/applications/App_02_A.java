@@ -2,7 +2,7 @@ package com.callor.applications;
 
 import java.util.Scanner;
 
-public class App_02 {
+public class App_02_A {
 	
 	public static void main(String args[]) {
 		
@@ -12,18 +12,10 @@ public class App_02 {
 		
 		int num = scan.nextInt();
 		
-		boolean bYes = num > 9;
-		boolean bYes1 = num < 2;
+		boolean bYes = num <= 9;
+		boolean bYes1 = num >= 2;
 		
-		if(bYes) {
-			System.out.println("==============================");
-			System.out.println("9초과 (2 ~ 9)의 숫자만 입력");
-		}
-		if(bYes1) {
-			System.out.println("==============================");
-			System.out.println("2미만 (2 ~ 9의 숫자만 입력");
-		}
-		if(!bYes && !bYes1) {
+		if(bYes && bYes1) {
 			System.out.println("==============================");
 			System.out.println("구구단 " + num + "단");
 			System.out.println("------------------------------");
@@ -33,7 +25,12 @@ public class App_02 {
 						int mul = num * i2;
 			
 					System.out.println(num + " x " + i2 + " = " + mul);
-			}
-		}System.out.println("==============================");
+				}
+		}
+		else {
+			System.out.println("입력한 숫자 : " + num);
+			System.out.println("값은 2 ~ 9까지만");
+		}
+		System.out.println("==============================");
 	}
 }
