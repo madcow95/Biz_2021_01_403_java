@@ -23,7 +23,7 @@ public class App_07 {
 		// ()안에 값을 주입한다. 라고 한다.
 		// 4를 arguments or 매개변수 라고 한다.
 		// 4를 myGu에 전달? 주입?
-		myGu.print(555);
+		myGu.print(4);
 		
 		Random rnd = new Random();
 		// Random 클래스의 enxtInt() method를 호출해라
