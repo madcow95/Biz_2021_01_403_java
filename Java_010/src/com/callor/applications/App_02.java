@@ -7,9 +7,7 @@ public class App_02 {
 	public static void main(String args[]) {
 		
 		Scanner scan = new Scanner(System.in);
-		
 		System.out.print("숫자입력(2 ~ 9) >> ");
-		
 		int num = scan.nextInt();
 		
 		boolean bYes = num > 9;
