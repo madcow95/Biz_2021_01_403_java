@@ -1,7 +1,7 @@
 package com.callor.test;
 
 import java.util.Scanner;
-
+// practice 프로젝트에서 이거먼저 선언을 해준다
 public class YourGuGuDan {
 	
 	public void kwoo() {
