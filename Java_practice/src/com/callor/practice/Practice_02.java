@@ -7,7 +7,7 @@ public class Practice_02 {
 	public static void main(String[] args) {
 		// 선언을 하고 print()안의 내용을 YourGuGuDan의 코드에 집어넣는
 		YourGuGuDan yourGu = new YourGuGuDan();
-		yourGu.print(11);
+		yourGu.print(5);
 		
 	}
 
