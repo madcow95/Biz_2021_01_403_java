@@ -25,12 +25,11 @@ public class Random_03 {
 		}
 			System.out.println("==========================");
 			for(int i = 0 ; i < 100 ; i++) {
-				// 0 ~ 99 중 임의의 수 1개를 만들어서 
-				// 변수 num에 저장해라.
 				
 				int num = rnd.nextInt(100) + 1;
 				// (+1) : 1 ~ 100까지 중 임의 수 1개를 만들어서
 				// 변수 num에 저장해라.
+				
 				System.out.print(num + "\t");
 				if((i + 1) % 5 == 0) {
 					System.out.println();

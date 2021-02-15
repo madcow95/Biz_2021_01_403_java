@@ -29,7 +29,7 @@ public class Random_05 {
 					System.out.println(num);
 				}
 			} // for end
-		System.out.println(intSum + "는(은) 1 ~ 100 짝수의 합");
+		System.out.println(intSum + "는(은) 1 ~ 100 랜덤짝수의 합");
 	}
 
 }
