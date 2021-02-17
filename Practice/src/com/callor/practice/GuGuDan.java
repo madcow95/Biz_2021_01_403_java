@@ -1,4 +1,4 @@
-package com.callor.GuGuDan;
+package com.callor.practice;
 
 import java.util.Scanner;
 
