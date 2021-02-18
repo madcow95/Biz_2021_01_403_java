@@ -20,6 +20,10 @@ public class ClassServiceV3 {
 	public void scope() {
 		System.out.print("숫자 입력 >> ");
 		int intNum1 = scan.nextInt();
+		
+		// method 선언명령문에 "void 키워드"가 있으면
+		// 이 위치에 return; 명령문이 있는것과 같다.
+		return;
 	}
 	
 	public void input() {
@@ -27,6 +31,7 @@ public class ClassServiceV3 {
 		intNum1 = scan.nextInt();
 		System.out.print("두번째 숫자입력 >> ");
 		intNum2 = scan.nextInt();
+		return;
 	}
 	
 	public void algebra() {
@@ -40,7 +45,8 @@ public class ClassServiceV3 {
 		 * "" 안에 문자열을 작성하여 출력문을 만드는 명령문
 		 * %d(Decimal(10진수)) 위치에 정수값을 대신 부착하여 문자열 출력문 생성
 		 */
-		// 첫번째 %d에 intNum1을 넣고 두번째 %d에 intNum2를 넣고 %d에 intNum3을 넣어라. 
+		// 첫번째 %d에 intNum1을 넣고 두번째 %d에 intNum2를 넣고 %d에 intNum3을 넣어라.
+		// \n은 enter같은 느낌 지우고 쓰면 println에서 ln빼고 쓴것처럼 나오네
 		System.out.printf(" %d + %d = %d \n", intNum1, intNum2,	intNum1 + intNum2);
 		System.out.printf(" %d - %d = %d \n", intNum1, intNum2,	intNum1 - intNum2);
 		System.out.printf(" %d x %d = %d \n", intNum1, intNum2,	intNum1 * intNum2);
