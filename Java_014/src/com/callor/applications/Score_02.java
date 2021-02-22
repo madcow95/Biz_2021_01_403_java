@@ -19,17 +19,17 @@ public class Score_02 {
 			
 			System.out.println("과목점수입력");
 			
-			System.out.print(strName[i] + " " + "국어 : ");
+			System.out.print(strName[i] + " 국어 : ");
 			// 문자열형으로 입력받고
 			String strSub = scan.nextLine();
 			// 문자열형숫자를 정수로 변경하여 저장
 			intKor[i] = Integer.valueOf(strSub);
 			
-			System.out.print(strName[i] + " " + "영어 : ");
+			System.out.print(strName[i] + " 영어 : ");
 			strSub = scan.nextLine();
 			intEng[i] = Integer.valueOf(strSub);
 			
-			System.out.print(strName[i] + " " + "수학 : ");
+			System.out.print(strName[i] + " 수학 : ");
 			strSub = scan.nextLine();
 			intMath[i] = Integer.valueOf(strSub);
 		}
