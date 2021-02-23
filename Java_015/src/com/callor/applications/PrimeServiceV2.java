@@ -8,8 +8,7 @@ public class PrimeServiceV2 {
 		// 아니면 return -1
 		// if(소수이면) return num;
 		// else return -1
-		int i = 0;
-		for (i = 2; i < num; i++) {
+		for (int i = 2; i < num; i++) {
 			// true 이면 소수가 아니다
 
 			if (num % i == 0) {
