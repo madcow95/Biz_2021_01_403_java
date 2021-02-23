@@ -17,6 +17,7 @@ public class HomeWork_01 {
 
 			rndNum[i] = rnd.nextInt(100) + 2;
 		}
+		
 		int intSum = 0;
 		for (int i = 0; i < rndNum.length; i++) {
 			// PrimeServiceV2에 rndNum[0 ~ 99]의 배열에 저장된 값을 보내 계산하게하고
@@ -37,6 +38,7 @@ public class HomeWork_01 {
 				System.out.print(intPrime[i] + ", ");
 			}
 		}
+		
 		System.out.println();
 		System.out.println("소수인 수들의 합 : " + intSum);
 
