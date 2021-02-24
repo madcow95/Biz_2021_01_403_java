@@ -15,7 +15,7 @@ public class HomeWork_01 {
 		// 1 ~ 100 의 범위 중 임의의 정수 100 개를 rndNum[0 ~ 99] 배열에 저장
 		for (int i = 0; i < rndNum.length; i++) {
 
-			rndNum[i] = rnd.nextInt(1000) + 2;
+			rndNum[i] = rnd.nextInt(100) + 2;
 		}
 
 		int intSum = 0;
