@@ -9,7 +9,7 @@ public class HomeWork_01 {
 		Random rnd = new Random();
 		PrimeServiceV2 psV2 = new PrimeServiceV2();
 		// 정수 100개를 저장할 배열 생성
-		int[] rndNum = new int[10];
+		int[] rndNum = new int[100];
 		// 임의의 정수 100개를 저장할 배열 생성
 		int[] intPrime = new int[rndNum.length];
 		// 1 ~ 100 의 범위 중 임의의 정수 100 개를 rndNum[0 ~ 99] 배열에 저장
@@ -32,7 +32,8 @@ public class HomeWork_01 {
 				intSum += intPrime[i];
 			}
 		}
-		System.out.println("임의의 정수 100개 중 소수");
+		
+		System.out.println("임의의 정수 " + rndNum.length + "개 중 소수");
 		// intPrime[0 ~ 99] 배열에 저장된 소수의 값을 출력하기 위한 코드
 		for (int i = 0; i < rndNum.length; i++) {
 			boolean bYes = intPrime[i] > 0;
@@ -40,7 +41,6 @@ public class HomeWork_01 {
 				System.out.print(intPrime[i] + ", ");
 			}
 		}
-
 		System.out.println();
 		System.out.println("소수인 수들의 합 : " + intSum);
 
