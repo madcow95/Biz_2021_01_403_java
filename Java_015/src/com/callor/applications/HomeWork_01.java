@@ -21,15 +21,20 @@ public class HomeWork_01 {
 		}
 
 		for (int i = 0; i < rndNum.length; i++) {
-			if (intPrime[i] > 0) {
+			if (intPrime[i] == -1) {
+				
+			}
+			else {
 				intSum += intPrime[i];
 			}
 		}
 		
 		System.out.println("임의의 정수 " + rndNum.length + "개 중 소수");
 		for (int i = 0; i < rndNum.length; i++) {
-			boolean bYes = intPrime[i] > 0;
-			if (bYes) {
+			if (intPrime[i] == -1) {
+				
+			}
+			else {
 				System.out.print(intPrime[i] + ", ");
 			}
 		}
