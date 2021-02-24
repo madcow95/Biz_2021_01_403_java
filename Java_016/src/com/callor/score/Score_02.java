@@ -2,6 +2,8 @@ package com.callor.score;
 
 import java.util.Random;
 
+import com.callor.score.service.ScoreServiceV1;
+
 public class Score_02 {
 
 	public static void main(String[] args) {
