@@ -11,9 +11,9 @@ public class HomeWork_011 {
 		int rndNum = 0;
 		for(int i = 0; i < 100; i++) {
 			
-			rndNum = rnd.nextInt(100) + 1;
+			rndNum = rnd.nextInt(100) + 2;
 		}
-		
+		System.out.println(rndNum);
 	}
 
 }
