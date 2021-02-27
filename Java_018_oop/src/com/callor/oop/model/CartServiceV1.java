@@ -1,25 +1,19 @@
-package com.callor.oop.controller;
+package com.callor.oop.model;
 
 import java.util.Scanner;
 
 public class CartServiceV1 {
 	private Scanner scan = new Scanner(System.in);
 	private String cartList;
-//	private String cartUserName;
-//	private String cartPName;
-//	private int cartIQty;
-//	private int cartIPrice;
 
 	// 이름, 제품명, 수량, 가격
 	public void inputCart() {
 
 		System.out.print("이름 입력 : ");
-		String cartListUserName = scan.nextLine();
-		this.cartList = cartListUserName;
+		this.cartList = scan.nextLine();
 		
 		System.out.print("제품명 입력 : ");
-		String cartListPName = scan.nextLine();
-		this.cartList = cartListPName;
+		this.cartList = scan.nextLine();
 
 		while (true) {
 			System.out.print("수량 입력 : ");
@@ -33,7 +27,7 @@ public class CartServiceV1 {
 					break;
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
+				System.out.println("숫자입력하세요");
 			}
 		} // end while
 
@@ -48,8 +42,8 @@ public class CartServiceV1 {
 				} else {
 					break;
 				}
-			} catch (Exception e) {
-				// TODO: handle exception
+			} catch (NumberFormatException e) {
+				System.out.println("숫자입력하세요");
 			}
 		} // end while
 	} // end inputCart
@@ -57,7 +51,7 @@ public class CartServiceV1 {
 
 	public void printCartList() {
 			System.out.println("이름\t제품명\t수량\t가격");
-			System.out.printf("%s\t%s\t%d\t%d\n",cartList.,cartList,cartList,cartList);
+			System.out.printf("%s\t%s\t%d\t%d\n");
 		
 	}
 
