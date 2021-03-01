@@ -14,11 +14,11 @@ public class CartServiceV1 {
 
 	// 이름 품목 수량 가격
 	public void inputCart() {
-
+		
 		System.out.print("이름 입력 : ");
 		String strUserName = scan.nextLine();
 		cVO.setCartUserName(strUserName);
-
+		
 		System.out.print("제품이름 입력 : ");
 		String strPName = scan.nextLine();
 		cVO.setCartPName(strPName);
@@ -36,9 +36,8 @@ public class CartServiceV1 {
 					System.out.println("2이상의 수를 입력하세요");
 					continue;
 				}
-
-			} catch (Exception e) {
-
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요");
 			}
 		}// end while
 		
@@ -55,8 +54,8 @@ public class CartServiceV1 {
 					System.out.println("1000이상의 수를 입력하세요");
 					continue;
 				}
-			} catch (Exception e) {
-
+			} catch (NumberFormatException e) {
+				System.out.println("2이상의 수를 입력하세요");
 			}
 			
 		}// end while
