@@ -52,12 +52,11 @@ public class MenuServiceImplV3 implements MenuService{
 			System.out.println("1. 카트 추가");
 			System.out.println("2. 카트 삭제");
 			System.out.println("3. 카트 리스트");
-			System.out.println("QUIT. 끝내기");
+			System.out.println("QUIT or Q or q. 끝내기");
 			System.out.println("----------------------");
 			System.out.print("선택 >> ");
 			String strMenu = scan.nextLine();
-			if
-			(strMenu.equals("QUIT")) {
+			if(strMenu.equals("QUIT") || strMenu.equals("Q") || strMenu.equals("q")) {
 				this.menuItem = null;
 				break;
 			}

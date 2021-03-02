@@ -11,7 +11,9 @@ public class CartServiceImplV4 implements CartService {
 
 	private List<CartVO> cartList;
 	private Scanner scan;
-
+	
+	// 생성자 method는 class와 이름이 같고,
+	// return type(void, String 등)이 없다
 	public CartServiceImplV4() {
 		cartList = new ArrayList<CartVO>();
 		scan = new Scanner(System.in);
@@ -29,7 +31,10 @@ public class CartServiceImplV4 implements CartService {
 		// 탈출구를 만들어 주어야 한다.
 		System.out.print("구매자 : ");
 		String strUserName = scan.nextLine();
-		
+//		if(strUserName == null) {
+//			CartVO cVO = new CartVO();
+//			cVO.setUserName("null");
+//		}
 		System.out.print("상품명 : ");
 		String strProName = scan.nextLine();
 
@@ -41,38 +46,40 @@ public class CartServiceImplV4 implements CartService {
 				intQty = Integer.valueOf(strQty);
 				if (intQty < 1) {
 					System.out.println("수량은 1개 이상입력");
+					continue;
 				} else {
 					break;
 				}
 			} catch (Exception e) {
 				System.out.println("수량은 숫자로만 입력");
 			}
+		}
 
-			int intPrice = 0;
-			while (true) {
-				System.out.print("단가 : ");
-				String strPrice = scan.nextLine();
-				try {
-					intPrice = Integer.valueOf(strPrice);
-					if (intPrice < 1) {
-						System.out.println("단가는 1000원 이상입력");
-					} else {
-						break;
-					}
-				} catch (Exception e) {
-					System.out.println("단가는 숫자로만 입력");
+		int intPrice = 0;
+		while (true) {
+			System.out.print("단가 : ");
+			String strPrice = scan.nextLine();
+			try {
+				intPrice = Integer.valueOf(strPrice);
+				if (intPrice < 1000) {
+					System.out.println("단가는 1000원 이상입력");
+				} else {
+					break;
 				}
+			} catch (Exception e) {
+				System.out.println("단가는 숫자로만 입력");
+			}
 
-			} // end while
+		} // end while
 
-			// 카트에 저장
-			CartVO cartVO = new CartVO();
-			cartVO.setUserName(strUserName);
-			cartVO.setProductName(strProName);
-			cartVO.setQty(intQty);
-			cartVO.setPrice(intPrice);
-			cartVO.setTotal(intPrice * intQty);
-			cartList.add(cartVO);
+		// 카트에 저장
+		CartVO cartVO = new CartVO();
+		cartVO.setUserName(strUserName);
+		cartVO.setProductName(strProName);
+		cartVO.setQty(intQty);
+		cartVO.setPrice(intPrice);
+		cartVO.setTotal(intPrice * intQty);
+		cartList.add(cartVO);
 //			System.out.println("=================================================");
 //			System.out.println("구매자\t상품명\t수량\t단가\t총합");
 //			System.out.println("=================================================");
@@ -82,15 +89,21 @@ public class CartServiceImplV4 implements CartService {
 //					cartVO.getQty(),
 //					cartVO.getPrice(),
 //					cartVO.getTotal());
-		} // end while
-	}
+	} // end while
 
 	@Override
 	public void printCart() {
 
 		int nSize = cartList.size();
+		System.out.println("===============================");
+		System.out.println("구매자\t상품명\t수량\t단가\t금액");
+		System.out.println("===============================");
 		for (int i = 0; i < nSize; i++) {
-			System.out.println(cartList.get(i).toString());
+			System.out.print(cartList.get(i).getUserName() + "\t");
+			System.out.print(cartList.get(i).getProductName() + "\t");
+			System.out.print(cartList.get(i).getQty() + "\t");
+			System.out.print(cartList.get(i).getPrice() + "\t");
+			System.out.print(cartList.get(i).getTotal() + "\t");
 		}
 	}
 
