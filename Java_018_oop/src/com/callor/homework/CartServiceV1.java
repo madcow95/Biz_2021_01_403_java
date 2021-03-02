@@ -1,7 +1,7 @@
 package com.callor.homework;
 
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 import java.util.Scanner;
 
 import com.callor.oop.model.CartVO;
@@ -9,7 +9,7 @@ import com.callor.oop.model.CartVO;
 public class CartServiceV1 {
 
 	private CartVO cVO = new CartVO();
-	private List<CartVO> cartList = new ArrayList<CartVO>();
+	//private List<CartVO> cartList = new ArrayList<CartVO>();
 	private Scanner scan = new Scanner(System.in);
 
 	// 이름 품목 수량 가격
@@ -59,16 +59,16 @@ public class CartServiceV1 {
 			}
 			
 		}// end while
-		//cartList.add(cVO);
 	}// end inputCart
-
+	
 	public void printCartList() {
 		System.out.println("=====================================");
 		System.out.println("입력정보 확인");
 		System.out.println("=====================================");
 		System.out.println("이름\t제품명\t수량\t가격");
 		System.out.println("=====================================");
-		System.out.printf("%s\t%s\t%d\t%d\n",cVO.getCartUserName(),
+		System.out.printf("%s\t%s\t%d\t%d\n",
+				cVO.getCartUserName(),
 				cVO.getCartPName(),
 				cVO.getCartQty(),
 				cVO.getCartPrice());
