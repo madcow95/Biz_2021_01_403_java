@@ -23,12 +23,12 @@ public class CartServiceV1 {
 		String strPName = scan.nextLine();
 		cVO.setCartPName(strPName);
 		
-		int intQty = 0;
+		//int intQty = 0;
 		while (true) {
 			System.out.print("수량 입력 : ");
 			String strQty = scan.nextLine();
 			try {
-				intQty = Integer.valueOf(strQty);
+				int intQty = Integer.valueOf(strQty);
 				if (intQty >= 2) {
 					cVO.setCartQty(intQty);
 					break;
@@ -41,12 +41,12 @@ public class CartServiceV1 {
 			}
 		}// end while
 		
-		int intPrice = 0;
+		//int intPrice = 0;
 		while (true) {
 			System.out.print("가격 입력 : ");
 			String strPrice = scan.nextLine();
 			try {
-				intPrice = Integer.valueOf(strPrice);
+				int intPrice = Integer.valueOf(strPrice);
 				if (intPrice >= 1000) {
 					cVO.setCartPrice(intPrice);
 					break;
@@ -55,7 +55,7 @@ public class CartServiceV1 {
 					continue;
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("2이상의 수를 입력하세요");
+				System.out.println("숫자를 입력해주세요");
 			}
 			
 		}// end while
@@ -73,5 +73,5 @@ public class CartServiceV1 {
 				cVO.getCartQty(),
 				cVO.getCartPrice());
 		System.out.println("=====================================");
-	}
+	}// end printCartList
 }
