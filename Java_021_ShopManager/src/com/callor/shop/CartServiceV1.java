@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.callor.shop.VO.CartVO;
+import com.callor.shop.inter.CartService;
+
 public class CartServiceV1 implements CartService {
 
-	Scanner scan;
-	List<CartVO> cartList;
+	private Scanner scan;
+	private List<CartVO> cartList;
 
 	public CartServiceV1() {
 		scan = new Scanner(System.in);
@@ -40,7 +43,6 @@ public class CartServiceV1 implements CartService {
 		}
 
 		int intPrice = 0;
-
 		while (true) {
 			try {
 				System.out.print("단가 : ");
@@ -71,13 +73,14 @@ public class CartServiceV1 implements CartService {
 
 	@Override
 	public void printCart() {
-
+		// cartList배열의 개수
 		int nSize = cartList.size();
 		// 단가의 총합
 		int totalSum = 0;
 		// 항목 개수
 		int listCount = 0;
 		System.out.println("구매자\t상품명\t수량\t단가\t총합");
+		// 출력
 		for (int i = 0; i < nSize; i++) {
 			System.out.printf("%s\t%s\t%d\t%d\t%d\n",
 					cartList.get(i).getUserName(),
@@ -114,12 +117,12 @@ public class CartServiceV1 implements CartService {
 						cartList.get(i).getPrice(),
 						cartList.get(i).getTotal());
 				totalSum += cartList.get(i).getTotal();
-				++listCount; 		
+				++listCount;
 			}
 		}
 		System.out.println("---------------------------------");
-		System.out.println("합계\t" + listCount+ "가지\t\t\t" + totalSum);
-
+		System.out.println("합계\t" + listCount + "가지\t\t\t" + totalSum);
+		System.out.println("=================================");
 	}
 
 }

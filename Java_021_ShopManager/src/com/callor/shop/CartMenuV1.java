@@ -2,10 +2,12 @@ package com.callor.shop;
 
 import java.util.Scanner;
 
+import com.callor.shop.inter.CartMenu;
+
 public class CartMenuV1 implements CartMenu {
 
-	Scanner scan;
-	CartServiceV1 csV1 = new CartServiceV1();
+	private Scanner scan;
+	private CartServiceV1 csV1 = new CartServiceV1();
 
 	public CartMenuV1() {
 		scan = new Scanner(System.in);
@@ -21,7 +23,7 @@ public class CartMenuV1 implements CartMenu {
 			System.out.println("1. 장바구니 상품 담기");
 			System.out.println("2. 장바구니 전체 리스트보기");
 			System.out.println("3. 구매자별 장바구니 리스트 보기");
-			System.out.println("끝내기 : ( QUIT / q / Q)");
+			System.out.println("끝내기 : ( QUIT / q / Q )");
 			System.out.println("=================================");
 			System.out.print("입력 >> ");
 			String select = scan.nextLine();
@@ -30,7 +32,7 @@ public class CartMenuV1 implements CartMenu {
 				return null;
 			}
 			int intSelect = Integer.valueOf(select);
-			// 1 < intSelect < 3 일때만 실행
+			// 1 <= intSelect <= 3 일때만 실행
 			if (intSelect >= 1 && intSelect <= 3) {
 				if (intSelect == 1) {
 					csV1.inputCart();
