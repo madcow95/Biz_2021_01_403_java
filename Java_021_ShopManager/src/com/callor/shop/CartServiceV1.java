@@ -89,7 +89,7 @@ public class CartServiceV1 implements CartService {
 					cartList.get(i).getPrice(),
 					cartList.get(i).getTotal());
 			totalSum += cartList.get(i).getTotal();
-			++listCount;
+			listCount++;
 		}
 		System.out.println("---------------------------------");
 		System.out.println("합계\t" + listCount + "가지\t\t\t" + totalSum);
@@ -117,7 +117,7 @@ public class CartServiceV1 implements CartService {
 						cartList.get(i).getPrice(),
 						cartList.get(i).getTotal());
 				totalSum += cartList.get(i).getTotal();
-				++listCount;
+				listCount++;
 			}
 		}
 		System.out.println("---------------------------------");
