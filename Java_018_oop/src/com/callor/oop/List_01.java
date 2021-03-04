@@ -19,7 +19,6 @@ public class List_01 {
 
 		ArrayList<String> books = new ArrayList<String>();
 		List<String> strNames = new ArrayList<String>();
-		
 		// books 리스트에 저장된 데이터들 중에서
 		// 0번 위치에 저장된 데이터를 Console에 출력해라
 		try {
