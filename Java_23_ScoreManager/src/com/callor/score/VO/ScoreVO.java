@@ -1,17 +1,30 @@
-package com.callor.score;
+package com.callor.score.VO;
 
 public class ScoreVO {
 	
-	private String num;
-	private int kor;
-	private int eng;
-	private int math;
-	private int science;
-	private int history;
+	String num;
+	int kor;
+	int eng;
+	int math;
+	int music;
+	int history;
+	int sum;
+	float avg;
 	
-	private int sum;
-	private float avg;
-	
+	public ScoreVO() {
+		// TODO Auto-generated constructor stub
+	}
+	public ScoreVO(String num, int kor, int eng, int math, int music, int history, int sum, float avg) {
+		super();
+		this.num = num;
+		this.kor = kor;
+		this.eng = eng;
+		this.math = math;
+		this.music = music;
+		this.history = history;
+		this.sum = sum;
+		this.avg = avg;
+	}
 	public String getNum() {
 		return num;
 	}
@@ -36,11 +49,11 @@ public class ScoreVO {
 	public void setMath(int math) {
 		this.math = math;
 	}
-	public int getScience() {
-		return science;
+	public int getMusic() {
+		return music;
 	}
-	public void setScience(int science) {
-		this.science = science;
+	public void setMusic(int music) {
+		this.music = music;
 	}
 	public int getHistory() {
 		return history;
@@ -61,4 +74,5 @@ public class ScoreVO {
 		this.avg = avg;
 	}
 
+	
 }
