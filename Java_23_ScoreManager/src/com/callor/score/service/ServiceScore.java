@@ -14,12 +14,12 @@ import com.callor.score.VO.ScoreVO;
 import com.callor.score.inter.ScoreService;
 import com.callor.score.values.Values;
 
-public class Service implements ScoreService {
+public class ServiceScore implements ScoreService {
 
 	private List<Integer> intList;
 	private String fileName;
 
-	public Service() {
+	public ServiceScore() {
 		intList = new ArrayList<Integer>();
 		fileName = "src/com/callor/score/score.txt";
 	}
@@ -61,15 +61,13 @@ public class Service implements ScoreService {
 	public void loadScoreFromFile() {
 		// TODO 100개의 점수 5개씩 나누어 점수별로 정렬하고 합계, 평균까지 Console에 출력
 		List<String> strList = new ArrayList<String>();
-		List<ScoreVO> scoreVO = new ArrayList<ScoreVO>();
-		FileReader read = null;
-		BufferedReader buffer = null;
+		List<ScoreVO> scoreList = new ArrayList<ScoreVO>();
 
 		try {
 			// fileName을 불러오기
-			read = new FileReader(fileName);
+			FileReader read = new FileReader(fileName);
 			// txt파일 한 줄씩 읽기
-			buffer = new BufferedReader(read);
+			BufferedReader buffer = new BufferedReader(read);
 
 			while (true) {
 				// 한 줄씩 읽은 내용을 str에 저장
@@ -94,8 +92,7 @@ public class Service implements ScoreService {
 		for (String str : strList) {
 			
 			ScoreVO sVO = new ScoreVO();
-			// :가 있는 마지막 줄에 줄 바꾸기
-			// 하고 줄 바꿀때마다 strScore 배열에 저장
+			// :가 있을 때마다 \n
 			String[] strScore = str.split(":");
 			// n번째 배열을 ScoreVO 클래스의 setter를 이용해 각각 점수에 저장
 			sVO.setKor(Integer.valueOf(strScore[0])); // 각 점수마다 4개씩 들어가겠지?
@@ -104,10 +101,10 @@ public class Service implements ScoreService {
 			sVO.setMusic(Integer.valueOf(strScore[3]));
 			sVO.setHistory(Integer.valueOf(strScore[4]));
 			// 저장된 점수들을 scoreVO 배열에 저장 // 20개의 배열을 갖는 scoreVO
-			scoreVO.add(sVO);
+			scoreList.add(sVO);
 		}
 		
-		for (ScoreVO vo : scoreVO) {
+		for (ScoreVO vo : scoreList) {
 			// ScoreVO 클래스의 getter를 이용해 각 점수 배열에 담긴 점수들을 불러와 더하고 sum setter에 저장
 			int sum = vo.getKor();
 			sum += vo.getEng();
@@ -126,7 +123,7 @@ public class Service implements ScoreService {
 		System.out.println(Values.sLine);
 		int count = 0;
 		// 점수 출력
-		for (ScoreVO vo : scoreVO) {
+		for (ScoreVO vo : scoreList) {
 			++count;
 			System.out.printf("%d\t\t%d\t%d\t%d\t%d\t%d\t%d\t%3.2f\n",
 					count,

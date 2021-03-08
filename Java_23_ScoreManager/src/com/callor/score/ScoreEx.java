@@ -1,15 +1,15 @@
 package com.callor.score;
 
-import com.callor.score.service.ScoreMenu;
-import com.callor.score.service.Service;
+import com.callor.score.service.MenuScore;
+import com.callor.score.service.ServiceScore;
 import com.callor.score.values.Values;
 
 public class ScoreEx {
 
 	public static void main(String args[]) {
 
-		Service service = new Service();
-		ScoreMenu sMenu = new ScoreMenu();
+		ServiceScore service = new ServiceScore();
+		MenuScore sMenu = new MenuScore();
 		
 		while (true) {
 			Integer select = sMenu.selectMenu();

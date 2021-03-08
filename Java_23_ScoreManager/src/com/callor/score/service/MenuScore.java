@@ -5,7 +5,7 @@ import java.util.Scanner;
 import com.callor.score.inter.MenuService;
 import com.callor.score.values.Values;
 
-public class ScoreMenu implements MenuService {
+public class MenuScore implements MenuService {
 
 	@Override
 	public Integer selectMenu() {
