@@ -16,8 +16,8 @@ import com.callor.score.values.Values;
 
 public class Service implements ScoreService {
 
-	List<Integer> intList;
-	String fileName;
+	private List<Integer> intList;
+	private String fileName;
 
 	public Service() {
 		intList = new ArrayList<Integer>();
