@@ -38,7 +38,6 @@ public class ScoreVO {
 	 * ScoreVO score = new ScoreVO() 명령문에서 호출되는 생성자 method
 	 */
 	public ScoreVO() {
-		super();
 		// TODO Auto-generated constructor stub
 	}
 	/*

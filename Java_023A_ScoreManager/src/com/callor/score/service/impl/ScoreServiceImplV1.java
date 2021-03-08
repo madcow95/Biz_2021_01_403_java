@@ -1,5 +1,8 @@
 package com.callor.score.service.impl;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,11 +21,13 @@ import com.callor.score.service.values.Values;
  * 2. 데이터를 입력 또는 생성하여 List에 담아두기
  */
 public class ScoreServiceImplV1 implements ScoreService {
-
+	
+	private String fileName; 
 	private List<ScoreVO> scoreList; // 객체 선언
 
 	public ScoreServiceImplV1() {
 		scoreList = new ArrayList<ScoreVO>();
+		fileName = "src/com/callor/score/score.txt";
 	}
 
 	@Override
@@ -89,7 +94,6 @@ public class ScoreServiceImplV1 implements ScoreService {
 	@Override
 	public void saveScoreTOFile() {
 		// TODO Auto-generated method stub
-		String fileName = "src/com/callor/score/score.txt";
 		
 		// 객체이름 명명
 		// 클래스 이름의 첫글자를 소문자로 하여 클래스 이름을 모두 사용한다.
@@ -120,11 +124,57 @@ public class ScoreServiceImplV1 implements ScoreService {
 
 	}
 
+	 //성적이 저장되어 있는 score.txt 파일을 읽어서 성적정보를 scoreList에 담기
 	@Override
 	public void loadScoreFromFile() {
 		// TODO Auto-generated method stub
-
-	}
+		
+		// 기존에 저장되어 있던 리스트를 모두 제거하자
+		// scoreList = new ArrayList<ScoreVO>(); 와 같은 의미
+		scoreList.removeAll(scoreList);
+		FileReader fileReader = null;
+		BufferedReader buffer = null;
+		
+		try {
+			fileReader = new FileReader(fileName);
+			buffer = new BufferedReader(fileReader);
+			
+			while(true) {
+				
+				String reader = buffer.readLine();
+				if (reader == null) {
+					break;
+				} 
+				// 읽어들인 문자열을 콜론(:)을 기준으로 잘라서 배열로 만들어달라.
+				// scores 배열에 담아라
+				String[] scores = reader.split(":");
+				// 필드 생성자를 호출하여 인스턴스 변수에 저장할 값을 전달하면서 동시에 객체를 초기화(생성
+				ScoreVO vo = new ScoreVO(
+						scores[0], // strNum
+						Integer.valueOf(scores[1]), // kor
+						Integer.valueOf(scores[2]), // eng
+						Integer.valueOf(scores[3]), // math
+						Integer.valueOf(scores[4]), // music
+						Integer.valueOf(scores[5]) // history
+						);
+				scoreList.add(vo);
+				
+			} // end while
+			buffer.close();
+			fileReader.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println(fileName + "파일이 없습니다");
+			//e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			System.out.println("파일을 읽는동안 문제가 발생했습니다.");
+		}
+		// 불러옴과 동시에 출력
+		this.printScore();
+	} // end loadScoreFromFile()
 	
 	private void totalAndAvg() {
 		for(ScoreVO vo : scoreList) {
