@@ -77,7 +77,7 @@ public class Service implements ScoreService {
 				if (str == null) {
 					break;
 				}
-				// str에 저장된 내용인 한 줄씩 strList 배열에 추가
+				// str에 저장된 내용(txt파일) 한 줄씩 strList 배열에 추가
 				strList.add(str);
 			} // end while
  			
@@ -90,25 +90,25 @@ public class Service implements ScoreService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ScoreVO sVO;
 		// strList의 배열 개수는 20개
 		for (String str : strList) {
-			sVO = new ScoreVO();
+			
+			ScoreVO sVO = new ScoreVO();
 			// :가 있는 마지막 줄에 줄 바꾸기
 			// 하고 줄 바꿀때마다 strScore 배열에 저장
 			String[] strScore = str.split(":");
-			// n번째 배열을 ScoreVO setter를 이용해 각각 점수에 저장
+			// n번째 배열을 ScoreVO 클래스의 setter를 이용해 각각 점수에 저장
 			sVO.setKor(Integer.valueOf(strScore[0])); // 각 점수마다 4개씩 들어가겠지?
 			sVO.setEng(Integer.valueOf(strScore[1]));
 			sVO.setMath(Integer.valueOf(strScore[2]));
 			sVO.setMusic(Integer.valueOf(strScore[3]));
 			sVO.setHistory(Integer.valueOf(strScore[4]));
-			// 저장된 점수들을 scoreVO 배열에 저장
+			// 저장된 점수들을 scoreVO 배열에 저장 // 20개의 배열을 갖는 scoreVO
 			scoreVO.add(sVO);
 		}
 		
 		for (ScoreVO vo : scoreVO) {
-			// ScoreVO getter를 이용해 각 점수 배열에 담긴 점수들을 불러와 sum setter에 저장
+			// ScoreVO 클래스의 getter를 이용해 각 점수 배열에 담긴 점수들을 불러와 더하고 sum setter에 저장
 			int sum = vo.getKor();
 			sum += vo.getEng();
 			sum += vo.getMath();
@@ -128,7 +128,7 @@ public class Service implements ScoreService {
 		// 점수 출력
 		for (ScoreVO vo : scoreVO) {
 			++count;
-			System.out.printf("%d\t\t%d\t%d\t%d\t%d\t%d\t%d\t%3.1f\n",
+			System.out.printf("%d\t\t%d\t%d\t%d\t%d\t%d\t%d\t%3.2f\n",
 					count,
 					vo.getKor(),
 					vo.getEng(),

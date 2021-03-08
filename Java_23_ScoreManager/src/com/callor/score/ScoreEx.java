@@ -10,6 +10,7 @@ public class ScoreEx {
 
 		Service service = new Service();
 		ScoreMenu sMenu = new ScoreMenu();
+		
 		while (true) {
 			Integer select = sMenu.selectMenu();
 			if (select == null) {

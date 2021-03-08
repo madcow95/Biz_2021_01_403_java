@@ -6,11 +6,10 @@ import com.callor.score.inter.MenuService;
 import com.callor.score.values.Values;
 
 public class ScoreMenu implements MenuService {
-	
-	
+
 	@Override
 	public Integer selectMenu() {
-		
+
 		Scanner scan = new Scanner(System.in);
 		while (true) {
 			System.out.println(Values.dLine);
@@ -25,8 +24,14 @@ public class ScoreMenu implements MenuService {
 			String select = scan.nextLine();
 
 			if (select.equalsIgnoreCase("quit")) {
-				return null;
+				System.out.println("종료할까요? (y)");
+				String yesNo = scan.nextLine();
+				if (yesNo.equalsIgnoreCase("y")) {
+					return null;
+				} else {
+				}
 			}
+
 			try {
 				int intSelect = Integer.valueOf(select);
 				if (intSelect == Values.MAKE_SCORE) {
