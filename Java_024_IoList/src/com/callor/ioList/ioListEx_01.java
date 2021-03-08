@@ -9,6 +9,8 @@ public class ioListEx_01 {
 		ServiceImplV1 siV1 = new ServiceImplV1();
 		
 		siV1.loadFile();
+		siV1.division();
+		siV1.print();
 		
 	}
 

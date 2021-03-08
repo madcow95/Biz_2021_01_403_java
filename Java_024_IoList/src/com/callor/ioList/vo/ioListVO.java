@@ -10,13 +10,13 @@ public class ioListVO {
 	private int buyPrice;
 	private int sellPrice;
 	private int qty;
-	private int buyTotal = buyPrice * qty;
-	private int sellTotal = sellPrice * qty;
+	private int buyTotal;
+	private int sellTotal;
+	
+	
 	
 	public ioListVO() {
-		// TODO Auto-generated constructor stub
 	}
-	
 	public ioListVO(String date, String productName, String departName, String chefName, int division, int buyPrice,
 			int sellPrice, int qty, int buyTotal, int sellTotal) {
 		super();
@@ -31,7 +31,6 @@ public class ioListVO {
 		this.buyTotal = buyTotal;
 		this.sellTotal = sellTotal;
 	}
-
 	public String getDate() {
 		return date;
 	}
@@ -99,6 +98,7 @@ public class ioListVO {
 				+ qty + ", buyTotal=" + buyTotal + ", sellTotal=" + sellTotal + "]";
 	}
 	
+		
 	
 
 }
