@@ -15,19 +15,24 @@ public class Ex_08 {
 
 	public static void main(String[] args) {
 
-		int[] intNum = new int[10];
 		Random rnd = new Random();
+		int rndNum = 0;
+		for (int i = 0; i < 100; i++) {
+			rndNum = rnd.nextInt(90) + 10;
+			int index = 0;
+			for (index = 2; index < rndNum; index++) {
+				if (rndNum % index == 0) {
+					break;
+				}
 
-		for (int i = 0; i < intNum.length; i++) {
-			intNum[i] = rnd.nextInt(90) + 10;
-			System.out.print(intNum[i] + ", ");
+			}
+			if (rndNum > index) {
+				System.out.println(rndNum + "는 소수요");
+			} else {
+				System.out.println(rndNum + "는 소수가 아니오");
+			}
 		}
-		
-		for(int i = 0; i < intNum.length; i++) {
-			//if(intNum[i] % i > 0) {
-				//System.out.println(intNum[i] + "는 소수");
-			//}
-		}
+
 	}
 
 }

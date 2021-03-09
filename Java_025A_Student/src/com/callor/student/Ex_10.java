@@ -17,10 +17,10 @@ public class Ex_10 {
 		int dan = 7;
 		System.out.printf("구구단 %d단\n",dan);
 		
-		for(int i = 1; i < 9; i++) {
+		for(int i = 0; i < 9; i++) {
 			int i2 = i + 1;
 			
-			System.out.printf("dan x %d = %d\n",i2,i2 * dan);
+			System.out.printf("%d x %d = %d\n",dan,i2,i2 * dan);
 		}
 	}
 
