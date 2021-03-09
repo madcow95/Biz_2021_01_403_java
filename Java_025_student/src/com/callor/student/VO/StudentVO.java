@@ -70,7 +70,7 @@ public class StudentVO {
 	@Override
 	public String toString() {
 		return "StudentVO [stuName=" + stuName + ", major=" + major + ", addr=" + addr + ", phone=" + phone
-				+ ", stuNum=" + stuNum + ", grade=" + grade + ", ban=" + ban + "]";
+				+ ", stuNum=" + stuNum + ", grade=" + grade + ", ban=" + ban + "]" + "\n";
 	}
 	
 	

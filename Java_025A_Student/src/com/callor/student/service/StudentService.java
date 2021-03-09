@@ -2,7 +2,7 @@ package com.callor.student.service;
 
 public interface StudentService {
 	
-	public void loadFile();
-	public void printFile();
+	public void loadStudentFromFile();
+	public void searchStudent();
 
 }
