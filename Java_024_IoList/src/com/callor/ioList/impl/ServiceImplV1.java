@@ -7,17 +7,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.callor.ioList.service.ioService;
-import com.callor.ioList.vo.ioListVO;
+import com.callor.ioList.service.IoService;
+import com.callor.ioList.values.Values;
+import com.callor.ioList.vo.IoListVO;
 
-public class ServiceImplV1 implements ioService {
+public class ServiceImplV1 implements IoService {
 
-	private List<ioListVO> ioList;
+	private List<IoListVO> ioList;
 	private String fileName;
 
 	public ServiceImplV1() {
 		fileName = "src/com/callor/ioList/매입매출데이터.txt";
-		ioList = new ArrayList<ioListVO>();
+		ioList = new ArrayList<IoListVO>();
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class ServiceImplV1 implements ioService {
 					break;
 				}
 				String[] list = reader.split(",");
-				ioListVO iVO = new ioListVO();
+				IoListVO iVO = new IoListVO();
 				iVO.setDate(list[0]); // 거래일자
 				iVO.setProductName(list[4]); // 상품명
 				iVO.setDepartName(list[5]); // 거래처명
@@ -52,7 +53,6 @@ public class ServiceImplV1 implements ioService {
 
 			buffer.close();
 			fileReader.close();
-
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,14 +67,12 @@ public class ServiceImplV1 implements ioService {
 
 	public void division() {
 		
-		for(ioListVO vo : ioList) {
+		for(IoListVO vo : ioList) {
 			
 			if (vo.getDivision() == 1) {
-				//int buyPrice = iVO.getBuyPrice() * iVO.getQty();
 				vo.setBuyTotal(vo.getBuyPrice() * vo.getQty());
 				vo.setSellPrice(0);
 			} else if (vo.getDivision() == 2) {
-				//int sellPrice = iVO.getSellPrice() * iVO.getQty();
 				vo.setSellTotal(vo.getSellPrice() * vo.getQty());
 				vo.setBuyPrice(0);
 			}
@@ -83,11 +81,11 @@ public class ServiceImplV1 implements ioService {
 	
 	public void print() {
 		
-		System.out.println("================================================");
+		System.out.println(Values.dLine);
 		System.out.println("거래일자\t거래처\t\t\t\t\t상품이름\t\t\t매입금액\t판매금액");
-		System.out.println("------------------------------------------------");
-		for(ioListVO vo : ioList) {
-		System.out.printf("%s\t%-15s\t\t\t%s\t%20d\t%-5d\n",
+		System.out.println(Values.sLine);
+		for(IoListVO vo : ioList) {
+		System.out.printf("%s\t%s\t\t\t\t%s\t\t\t%d\t\t%d\n",
 				vo.getDate(),
 				vo.getDepartName(),
 				vo.getProductName(),

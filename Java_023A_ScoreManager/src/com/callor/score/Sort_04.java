@@ -47,7 +47,7 @@ public class Sort_04 {
 		int nSize = scoreList.size();
 		for(int i = 0; i < nSize; i++) {
 			
-			for(int j = 0; j < nSize; j++) {
+			for(int j = i + 1; j < nSize; j++) {
 				ScoreVO vo_i = scoreList.get(i);
 				ScoreVO vo_j = scoreList.get(j);
 				

@@ -2,7 +2,7 @@ package com.callor.ioList;
 
 import com.callor.ioList.impl.ServiceImplV1;
 
-public class ioListEx_01 {
+public class IoListEx_01 {
 	
 	public static void main(String[] args) {
 		
@@ -11,7 +11,6 @@ public class ioListEx_01 {
 		siV1.loadFile();
 		siV1.division();
 		siV1.print();
-		
 	}
 
 }

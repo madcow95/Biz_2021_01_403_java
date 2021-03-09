@@ -1,6 +1,6 @@
 package com.callor.ioList.vo;
 
-public class ioListVO {
+public class IoListVO {
 	
 	private String date;
 	private String productName;
@@ -13,11 +13,9 @@ public class ioListVO {
 	private int buyTotal;
 	private int sellTotal;
 	
-	
-	
-	public ioListVO() {
+	public IoListVO() {
 	}
-	public ioListVO(String date, String productName, String departName, String chefName, int division, int buyPrice,
+	public IoListVO(String date, String productName, String departName, String chefName, int division, int buyPrice,
 			int sellPrice, int qty, int buyTotal, int sellTotal) {
 		super();
 		this.date = date;
