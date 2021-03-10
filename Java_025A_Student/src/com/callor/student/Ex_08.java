@@ -16,9 +16,11 @@ public class Ex_08 {
 	public static void main(String[] args) {
 
 		Random rnd = new Random();
+
 		int rndNum = 0;
 		for (int i = 0; i < 100; i++) {
-			rndNum = rnd.nextInt(90) + 10;
+
+			rndNum = rnd.nextInt(91) + 10;
 			int index = 0;
 			for (index = 2; index < rndNum; index++) {
 				if (rndNum % index == 0) {
@@ -26,12 +28,15 @@ public class Ex_08 {
 				}
 
 			}
+
 			if (rndNum > index) {
-				System.out.println(rndNum + "는 소수요");
-			} else {
 				System.out.println(rndNum + "는 소수가 아니오");
+			} else {
+				System.out.println(rndNum + "는 소수요");
 			}
 		}
+
+		
 
 	}
 
