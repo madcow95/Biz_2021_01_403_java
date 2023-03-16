@@ -43,3 +43,4 @@
 * git commit 까지만 입력하면 : vi editor
 
 https://enevcording.tistory.com/m/entry/%EC%A4%91%EA%B8%B0%EC%B2%AD-%EC%A0%84%EC%84%B8%EC%9E%90%EA%B8%88%EB%8C%80%EC%B6%9C-%EC%8B%A4%EC%A0%9C-%EC%8A%B9%EC%9D%B8-%ED%9B%84%EA%B8%B0-%ED%95%84%EC%9A%94%EC%84%9C%EB%A5%98-%EA%B8%B0%EA%B0%84
+https://min-nine.tistory.com/16
