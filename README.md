@@ -54,6 +54,7 @@ https://lkoon.tistory.com/entry/%EC%A4%91%EC%86%8C%EA%B8%B0%EC%97%85%EC%B2%AD%EB
 https://yeon9218.tistory.com/25
 https://cafe.naver.com/lhuniv9
 https://binco.tistory.com/entry/%EC%A4%91%EC%86%8C%EA%B8%B0%EC%97%85-%EC%B2%AD%EB%85%84-%EC%A0%84%EC%84%B8%EB%8C%80%EC%B6%9C-%EC%86%94%EC%A7%81%ED%9B%84%EA%B8%B0-%EB%B0%A9%EB%B2%95
+https://velog.io/@marisol/SwiftUI-Published-vs-State
 
 RxSwift -> https://babbab2.tistory.com/182
 
