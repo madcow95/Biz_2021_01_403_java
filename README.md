@@ -62,7 +62,10 @@ https://cafe.naver.com/lhuniv9/398110
 https://cafe.naver.com/lhuniv9?iframe_url=%2Fca-fe%2Fcafes%2F24175469%2Fmenus%2F130%2Farticles%2Fwrite-error
 
 
-
 https://double-y.tistory.com/49
 
 https://www.peterpanz.com/house/14085067?utm_source=naver&utm_medium=link
+
+# 23/04/18
+@State, @ObservedObject
+https://medium.com/harrythegreat/swiftui-%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC-5%ED%8E%B8-state-binding-observedobject-83c00c3317cb
