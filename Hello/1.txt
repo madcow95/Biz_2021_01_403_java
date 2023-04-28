@@ -1,0 +1,764 @@
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5 import uic
+from pytimekr import pytimekr
+
+import json
+import csv
+
+import requests
+from bs4 import BeautifulSoup
+
+import threading
+
+import urllib3
+from urllib3.exceptions import InsecureRequestWarning
+urllib3.disable_warnings(InsecureRequestWarning)
+
+# UI 파일 위치
+form_class = uic.loadUiType('NewMacroUI.ui')[0]
+
+url1 = 'https://www.ycs.or.kr/fmcs/4'
+url2 = 'https://www.ycs.or.kr/fmcs/4?action=write_proc'
+
+def Reservation(self):
+    login_url = 'https://www.ycs.or.kr/fmcs/133?referer=%2Ffmcs%2F132'
+
+    # 세션 객체 생성
+    session = requests.Session()
+
+    login_page = session.get(login_url, verify=False)
+
+    soup = BeautifulSoup(login_page.text, 'html.parser')
+    security_token = soup.find('input', {'name': 'SecurityToken'}).get('value')
+
+    # 로그인 폼 파싱
+    login_data = {
+        'SecurityToken': security_token,
+        'user_id': self.selectedLoginUserInfo['id'],
+        'user_password': self.selectedLoginUserInfo['pwd']
+    }
+
+    # 로그인 요청 보내기
+    response = session.post(login_url, params=login_data, verify=False)
+
+    # 로그인 성공 여부 확인
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        loginPMessage = soup.find('p')
+
+        if loginPMessage.text.find('양천구시설관리공단 사이트에 오신것을 환영합니다.') > 0:
+            self.setLog(self.cb_Users.currentText() + ' 로그인 성공')
+        else:
+            self.setLog(self.cb_Users.currentText() + ' 로그인 실패')
+            self.stopMacroAction()
+            return
+    else:
+        self.setLog(self.cb_Users.currentText() + ' 로그인 실패')
+        self.stopMacroAction()
+        return
+
+    self.setLog('매크로 돌리는 중...')
+
+    macroInfoList = self.macroInfoList
+
+    # 대표자
+    teamName = self.cb_Users.currentText()
+    # 이용 날짜
+    usedDate = self.cal_UsedDate.selectedDate().toString('yyyyMMdd')
+    # 시작 코트
+    startCourt = self.cb_StartCourt.currentText()
+    # 종료 코트
+    endCourt = self.cb_EndCourt.currentText()
+    # 시작 시간
+    startTime = int(self.cb_StartTime.currentText().split(':')[0])
+    # 종료 시간
+    endTime = int(self.cb_EndTime.currentText().split(':')[0])
+
+    if str(startCourt) != str(endCourt):
+        for infinite in range(10000000000):
+            courtNumberUp = int(startCourt)
+            while courtNumberUp <  int(endCourt) + 1:
+                timeText = getTimeNo(macroInfoList, int(startTime), int(endTime), int(courtNumberUp), self.isWeek)
+                try:
+                    if self.isStart:
+                        data = setReservationData1(str(courtNumberUp), timeText, str(usedDate))
+
+                        response = session.post(url1, params=data, verify=False)
+
+                        if response.status_code == 200:
+                            headers = setReservationHeader()
+                            data = setReservationInfo(response, teamName)
+                            response2 = session.post(url2, headers=headers, params=data, verify=False)
+
+                            if response2.status_code == 200:
+                                courtNumberUp += 1
+                            else:
+                                courtNumberUp += 1
+                        else:
+                            courtNumberUp += 1
+                    else:
+                        session.get('https://www.ycs.or.kr/fmcs/137', verify=False)
+                        session.close()
+                        return;
+                except:
+                    courtNumberUp += 1
+    else:
+        timeText = getTimeNo(macroInfoList, int(startTime), int(endTime), int(startCourt), self.isWeek)
+        print(timeText)
+        for i in range(10000000000):
+            try:
+                if self.isStart:
+                    data = setReservationData1(str(startCourt), timeText, str(usedDate))
+
+                    response = session.post(url1, params=data, verify=False)
+
+                    if response.status_code == 200:
+                        headers = setReservationHeader()
+                        data = setReservationInfo(response, teamName)
+                        response2 = session.post(url2, headers=headers, params=data, verify=False)
+
+                        if response2.status_code == 200:
+                            print("요청이 성공하였습니다.")
+                        else:
+                            print("요청이 실패하였습니다.")
+                else:
+                    session.get('https://www.ycs.or.kr/fmcs/137', verify=False)
+                    session.close()
+                    return;
+            except:
+                pass
+
+def setReservationInfo(response, teamName):
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    securityToken = getInputValue(soup, 'input', 'SecurityToken')
+
+    placeCode = getInputValue(soup, 'input', 'place_code')
+
+    memNo = getInputValue(soup, 'input', 'mem_no')
+
+    startDate = getInputValue(soup, 'input', 'start_date')
+
+    endDate = getInputValue(soup, 'input', 'end_date')
+
+    timeDatas = getInputValue(soup, 'input', 'time_datas')
+
+    totalAmount = getInputValue(soup, 'input', 'total_amount')
+
+    memNm = getInputValue(soup, 'input', 'mem_nm')
+
+    mobileTel = getInputValue(soup, 'input', 'mobile_tel')
+
+    return setReservationData2(securityToken, placeCode, memNo, startDate, endDate, timeDatas, totalAmount, memNm,
+                               teamName, mobileTel)
+
+def getInputValue(soup, tagName, propName):
+    inputTag = soup.find(tagName, {'name': propName})
+    value = inputTag['value']
+
+    return value
+
+def getTimeNo(macroInfoList, rStartTime, rEndTime, rCourtNum, rIsWeek):
+    if not rIsWeek:
+        # 시간 [9,10,11,12]
+        startTimeArr = []
+        for i in range(rStartTime, rEndTime):
+            startTimeArr.append(i)
+
+        res = ''
+        # 658;평일 8회;1600;1700;1|659;평일 9회;1700;1800;1
+        # 658;평일 7회;1600;1700;1|659;평일 8회;1700;1800;1
+        for startTime in startTimeArr:
+            timeText = ''
+            if int(startTime) == 9:
+                timeText = '0' + str(startTime) + '00;' + str(startTime + 1) + '00;'
+            else:
+                timeText = str(startTime) + '00;' + str(startTime + 1) + '00;'
+
+            if int(rCourtNum) == 9 or int(rCourtNum) == 12 or int(rCourtNum) == 14 or int(rCourtNum) == 16:
+                res += macroInfoList[int(rCourtNum)][startTime - 8] + ';평일 ' + str(startTime - 5) + '회;' + timeText + '1|'
+            else:
+                res += macroInfoList[int(rCourtNum)][startTime - 8] + ';평일 ' + str(startTime - 8) + '회;' + timeText + '1|'
+
+        return res[:-1]
+    else:
+        startTimeArr = []
+
+        if rEndTime == 22:
+            startTimeArr = [19, 21]
+        else:
+            if rStartTime == rEndTime - 2:
+                startTimeArr = [rStartTime]
+            else:
+                startTimeArr = [rStartTime, rEndTime - 2]
+
+        res = ''
+        for startTime in startTimeArr:
+            timeText = ''
+            if int(startTime) == 9:
+                timeText = '0' + str(startTime) + '00;' + str(startTime + 2) + '00;'
+            else:
+                timeText = str(startTime) + '00;' + str(startTime + 2) + '00;'
+
+            if startTime == 9:
+                count = 1
+            elif startTime == 11:
+                count = 2
+            elif startTime == 13:
+                count = 3
+            elif startTime == 15:
+                count = 4
+            elif startTime == 17:
+                count = 5
+            elif startTime == 19:
+                count = 6
+            elif startTime == 21:
+                count = 7
+
+            res += macroInfoList[int(rCourtNum)][count] + ';주말 ' + str(count) + '회;' + timeText + '1|'
+
+        return res[:-1]
+
+def setReservationData1(place_cd, time_no, rent_date):
+    return {
+        'action': 'write',
+        'comcd': 'YCS04',
+        'part_cd': '02',
+        'place_cd': place_cd,
+        'time_no': time_no,
+        'rent_type': '1001',
+        'rent_date': rent_date
+    }
+
+def setReservationData2(security_token, place_code, mem_no, start_date, end_date, time_datas, total_amount, mem_nm, users, mobile_tel):
+    return {
+        'SecurityToken': security_token,
+        'type': '',
+        'company_code': 'YCS04',
+        'part_code': '02',
+        'place_code': place_code,
+        'guest_yn': 'N',
+        'mem_no': mem_no,
+        'team_no': '0',
+        'start_date': start_date,
+        'start_time': '',
+        'end_date': end_date,
+        'end_time': '',
+        'time_datas': time_datas,
+        'total_amount': total_amount,
+        'mem_nm': mem_nm,
+        'team_nm': users,
+        'team_yn': 'N',
+        'users': '4',
+        'mobile_tel': mobile_tel,
+        'tel': '',
+        'type_cd': '1001',
+        'title': '',
+        'purpose': '1',
+        'attachfile_count': '1',
+        'attachfile': '(바이너리)',
+        'place_item_1_dc': '',
+        'agree_use': 'Y'
+    }
+
+def setReservationHeader():
+    return {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3; q=0.7",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary9U2pEnbqCE0ZGdm3",
+        "Host": "www.ycs.or.kr",
+        "Origin": "https://www.ycs.or.kr",
+        "Pragma": "no-cache",
+        "Referer": "https://www.ycs.or.kr/fmcs/4",
+        "sec-ch-ua": "\"Chromium\";v=\"112\", \"Google Chrome\";v=\"112\", \"Not:A-Brand\";v=\"99\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "same-origin",
+        "Sec-Fetch-User": "?1",
+        "Upgrade-Insecure-Requests": "1",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
+    }
+	
+class WindowClass(QMainWindow, form_class):
+    def __init__(self):
+        super().__init__()
+
+        self.isWeek = False
+        self.isStart = False
+        self.macroInfoList = None
+        self.selectedLoginUserInfo = None
+
+        fHolidays = pytimekr.holidays()  # holidays메소드는 리스트 형태로 관련값 반환
+        holidays = []
+        for fHoliday in fHolidays:
+            holidays.append(fHoliday.strftime('%Y%m%d'))
+
+        holidays.append('20220912')
+        self.holidays = holidays
+
+        self.setWindowIcon(QIcon('logo.png'))
+
+        self.setupUi(self)
+
+        # User객체에 User 추가
+        with open('userInfos.txt', 'r', encoding='UTF8') as file:
+            file_content = file.read()
+
+        if file_content:
+            userInfos = json.loads(file_content)
+            self.cb_Users.addItem('')
+            for userInfo in userInfos:
+                self.cb_Users.addItem(userInfo['name'])
+        else:
+            self.cb_Users.addItem('등록 된 정보가 없습니다.')
+
+        self.cb_Users.currentIndexChanged.connect(self.selectedLoginUser)
+
+        self.cal_UsedDate.showToday()
+
+        # 공휴일 표시
+        fm = QTextCharFormat()
+        fm.setForeground(Qt.red)
+        fm.setBackground(Qt.yellow)
+
+        # 날짜 선택
+        self.cal_UsedDate.setGridVisible(True)
+        for holiday in self.holidays:
+            dHoliday = QDate.fromString(str(holiday), "yyyyMMdd")
+            self.cal_UsedDate.setDateTextFormat(dHoliday, fm)
+
+        self.cal_UsedDate.clicked.connect(self.calendarClicked)
+
+        self.setCourt(1)
+        self.setReservationTime()
+        self.setReservationEndTime()
+
+        self.cb_StartCourt.currentIndexChanged.connect(self.changeEndCourtComboBoxAction)
+        self.cb_StartTime.currentIndexChanged.connect(self.changeEndTimeComboBoxAction)
+
+        self.le_UserPwd.setEchoMode(QLineEdit.Password)
+
+        # 시작
+        self.btn_Start.clicked.connect(self.startMacroAction)
+
+        # 정지
+        self.btn_Stop.clicked.connect(self.stopMacroAction)
+        self.btn_Stop.setEnabled(False)
+
+        self.btn_CheckNAdd.clicked.connect(self.checkUserValidation)
+
+        self.btn_UserAdd.clicked.connect(self.addedNewUser)
+        self.btn_UserAdd.setEnabled(False)
+
+        # 종료 버튼 - btn_Exit
+        self.btn_Exit.clicked.connect(QCoreApplication.instance().quit)
+
+    # Function
+    # ==========================================================================
+    # setReservationTime
+    def setReservationTime(self):
+        self.cb_StartTime.clear()
+        self.cb_EndTime.clear()
+
+        holidays = self.holidays
+        usedDate = self.cal_UsedDate.selectedDate().toString('yyyyMMdd')
+        week = self.cal_UsedDate.selectedDate().dayOfWeek()
+
+        # 빨간날
+        if (usedDate in holidays) or (week == 6 or week == 7):
+            self.isWeek = True
+            for i in range(7):
+                iStartTime = (i * 3) + 9 - i
+
+                sStartTime = str(iStartTime)
+
+                if iStartTime <  10:
+                    sStartTime = '0' + sStartTime
+
+                self.cb_StartTime.addItem(sStartTime + ":00")
+        else:
+            self.isWeek = False
+            for i in range(13):
+                iStartTime = 9 + i
+
+                sStartTime = str(iStartTime)
+
+                if iStartTime <  10:
+                    sStartTime = '0' + sStartTime
+
+                self.cb_StartTime.addItem(sStartTime + ":00")
+
+    def setReservationEndTime(self):
+        week = self.cal_UsedDate.selectedDate().dayOfWeek()
+
+        self.cb_EndTime.clear()
+
+        startTimeIndex = self.cb_StartTime.currentIndex()
+        usedDate = self.cal_UsedDate.selectedDate().toString('yyyyMMdd')
+        holidays = self.holidays
+
+        # 빨간날
+        if (usedDate in holidays) or (week == 6 or week == 7):
+            for i in range(startTimeIndex, 7):
+                iEndtime = (i * 3) + 11 - i
+                sEndTime = str(iEndtime)
+
+                if iEndtime == 23:
+                    sEndTime = str(iEndtime - 1)
+
+                self.cb_EndTime.addItem(sEndTime + ":00")
+        else:
+            for i in range(startTimeIndex, 13):
+                iEndtime = 10 + i
+                sEndTime = str(iEndtime)
+
+                if iEndtime == 23:
+                    sEndTime = str(iEndtime - 1)
+
+                self.cb_EndTime.addItem(sEndTime + ":00")
+
+    # changeEndCourtComboBoxAction
+    def changeEndCourtComboBoxAction(self):
+        startCourtNum = int(self.cb_StartCourt.currentText())
+        self.setCourt(startCourtNum)
+
+    # changeEndTimeComboBoxAction
+    def changeEndTimeComboBoxAction(self):
+        self.setReservationEndTime()
+
+    # setCourt
+    def setCourt(self, start):
+        if self.cb_StartCourt.count() > 0:
+            self.cb_EndCourt.clear()
+
+            for i in range(start, 19):
+                self.cb_EndCourt.addItem(str(i))
+        else:
+            for i in range(start, 19):
+                self.cb_StartCourt.addItem(str(i))
+                self.cb_EndCourt.addItem(str(i))
+
+    # checkUserValidation
+    def checkUserValidation(self):
+        inputName = self.le_UserName.text()
+        inputId = self.le_UserId.text()
+        inputPwd = self.le_UserPwd.text()
+
+        if not inputName:
+            QMessageBox.warning(self, 'Warning', '이름을 입력하세요')
+            self.le_UserName.setFocus()
+            return
+
+        if not inputId:
+            QMessageBox.warning(self, 'Warning', '아이디를 입력하세요')
+            self.le_UserId.setFocus()
+            return
+
+        if not inputPwd:
+            QMessageBox.warning(self, 'Warning', '비밀번호를 입력하세요')
+            self.le_UserPwd.setFocus()
+            return
+
+
+        login_url = 'https://www.ycs.or.kr/fmcs/133?referer=%2Ffmcs%2F132'
+
+        # 세션 객체 생성
+        session = requests.Session()
+
+        login_page = session.get(login_url, verify=False)
+
+        soup = BeautifulSoup(login_page.text, 'html.parser')
+        security_token = soup.find('input', {'name': 'SecurityToken'}).get('value')
+
+        # 로그인 폼 파싱
+        login_data = {
+            'SecurityToken': security_token,
+            'user_id': inputId,
+            'user_password': inputPwd
+        }
+
+        # 로그인 요청 보내기
+        response = session.post(login_url, params=login_data, verify=False)
+
+        # 로그인 성공 여부 확인
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            loginPMessage = soup.find('p')
+
+            if loginPMessage.text.find('양천구시설관리공단 사이트에 오신것을 환영합니다.') > 0:
+                QMessageBox.information(self, 'Success', '로그인 정보 확인 완료
+ADD 버튼을 통해 추가 해주세요.')
+
+                self.setBtnCss(True)
+
+            else:
+                QMessageBox.critical(self, 'Error', '입력 한 정보가 올바르지 않습니다.')
+
+                self.setBtnCss(False)
+        else:
+            QMessageBox.critical(self, 'Error', '입력 한 정보가 올바르지 않습니다.')
+            self.setBtnCss(False)
+
+    def setBtnCss(self, res):
+        if res:
+            self.btn_CheckNAdd.setStyleSheet("color: red;"
+                                             "border-style: solid;"
+                                             "border-width: 1px;"
+                                             "border-color: red;"
+                                             "border-radius: 3px;"
+                                             "font: 16pt HY엽서L;"
+                                             "text-decoration: line-through;")
+
+            self.btn_UserAdd.setStyleSheet("color: green;"
+                                           "border-style: solid;"
+                                           "border-width: 1px;"
+                                           "border-color: green;"
+                                           "border-radius: 3px;"
+                                           "font: 16pt HY엽서L;")
+
+            self.le_UserName.setEnabled(False)
+            self.le_UserId.setEnabled(False)
+            self.le_UserPwd.setEnabled(False)
+            self.btn_UserAdd.setEnabled(True)
+        else:
+            self.btn_UserAdd.setStyleSheet("color: red;"
+                                             "border-style: solid;"
+                                             "border-width: 1px;"
+                                             "border-color: red;"
+                                             "border-radius: 3px;"
+                                             "font: 16pt HY엽서L;"
+                                             "text-decoration: line-through;")
+
+            self.btn_CheckNAdd.setStyleSheet("color: green;"
+                                           "border-style: solid;"
+                                           "border-width: 1px;"
+                                           "border-color: green;"
+                                           "border-radius: 3px;"
+                                           "font: 16pt HY엽서L;")
+
+            self.le_UserName.setEnabled(True)
+            self.le_UserId.setEnabled(True)
+            self.le_UserPwd.setEnabled(True)
+            self.btn_UserAdd.setEnabled(False)
+
+    # addedNewUser
+    def addedNewUser(self):
+        res = True
+
+        # User 객체에 User 추가
+        with open('userInfos.txt', 'r', encoding='UTF8') as file:
+            file_content = file.read()
+
+        if file_content:
+            userInfos = json.loads(file_content)
+            for userInfo in userInfos:
+                if self.le_UserId.text() == userInfo['id']:
+                    res = False
+
+        if not res:
+            QMessageBox.warning(self, 'Warning', '입력 한 정보가 이미 존재합니다.')
+
+            self.le_UserName.clear()
+            self.le_UserId.clear()
+            self.le_UserPwd.clear()
+            self.setBtnCss(False)
+
+        else:
+            inputName = self.le_UserName.text()
+            inputId = self.le_UserId.text()
+            inputPwd = self.le_UserPwd.text()
+
+            if file_content:
+                userInfos = json.loads(file_content)
+                # Define the object to add to the file
+                new_user = {"name": inputName, "id": inputId, "pwd": inputPwd}
+
+                # Append the new object to the data
+                userInfos.append(new_user)
+
+                # Write the updated data to the file
+                with open('userInfos.txt', 'w') as f:
+                    json.dump(userInfos, f)
+            else:
+                new_user = [{"name": inputName, "id": inputId, "pwd": inputPwd}]
+
+                with open('userInfos.txt', 'w') as f:
+                    json.dump(new_user, f)
+
+            QMessageBox.information(self, 'Success', '로그인 정보가 추가 되었습니다.')
+
+            self.le_UserName.clear()
+            self.le_UserId.clear()
+            self.le_UserPwd.clear()
+            self.setBtnCss(False)
+
+            # User객체에 User 추가
+            self.cb_Users.clear()
+
+            with open('userInfos.txt', 'r', encoding='UTF8') as file:
+                file_content = file.read()
+
+            if file_content:
+                userInfos = json.loads(file_content)
+                self.cb_Users.addItem('')
+                for userInfo in userInfos:
+                    self.cb_Users.addItem(userInfo['name'])
+
+    # selectedUserDate
+    def calendarClicked(self):
+        self.setReservationTime()
+        self.setLog("선택 한 날짜 - [" + self.cal_UsedDate.selectedDate().toString('yyyy.MM.dd') + "]")
+
+    # selectedLoginUser
+    def selectedLoginUser(self):
+        if self.cb_Users.currentText() != '':
+            self.setLog("선택 한 사용자 - [" + self.cb_Users.currentText() + "]")
+
+            # User객체에 User 추가
+            with open('userInfos.txt', 'r', encoding='UTF8') as file:
+                file_content = file.read()
+
+            userInfoList = json.loads(file_content)
+            for userInfo in userInfoList:
+                if self.cb_Users.currentText() == userInfo['name']:
+                    self.selectedLoginUserInfo = userInfo
+
+    # startMacroValidation
+    def startMacroValidation(self):
+        # 대표자
+        teamName = self.cb_Users.currentText()
+        # 이용 날짜
+        usedData = self.cal_UsedDate.selectedDate().toString('yyyyMMdd')
+        # 시작 코트
+        startCourt = self.cb_StartCourt.currentText()
+        # 종료 코트
+        endCourt = self.cb_EndCourt.currentText()
+        # 시작 시간
+        startTime = self.cb_StartTime.currentText()
+        # 종료 시간
+        endTime = self.cb_EndTime.currentText()
+
+        res = True
+        if teamName == '':
+            self.setLog('USER 미선택')
+            res = False
+
+        if usedData == '':
+            self.setLog('날짜 미선택')
+            res = False
+
+        if startCourt == '':
+            self.setLog('시작 코트 미선택')
+            res = False
+
+        if endCourt == '':
+            self.setLog('종료 코트 미선택')
+            res = False
+
+        if startTime == '':
+            self.setLog('시작 시간 미선택')
+            res = False
+
+        if endTime == '':
+            self.setLog('종료 시간 미선택')
+            res = False
+
+        if startTime != '' and endTime != '':
+            iStartTime = int(startTime.split(':')[0])
+            iEndTime = int(endTime.split(':')[0])
+
+            if iEndTime - iStartTime > 4:
+                self.setLog('해당 시설을 예약 하기 위한 최대 시간을 초과하였습니다.')
+                res = False
+
+        if not res:
+            QMessageBox.critical(self, 'Error', '로그를 확인 하세요.')
+
+        return res
+
+    # 매크로 시작
+    @pyqtSlot()
+    def startMacroAction(self):
+        if self.startMacroValidation():
+            self.btn_Start.setEnabled(False)
+            self.btn_Stop.setEnabled(True)
+
+            self.cb_StartCourt.setEnabled(False)
+            self.cb_EndCourt.setEnabled(False)
+
+            self.cb_StartTime.setEnabled(False)
+            self.cb_EndTime.setEnabled(False)
+
+            self.cal_UsedDate.setEnabled(False)
+
+            self.groupBox.setVisible(False)
+
+            self.setLog('매크로 시작')
+            self.isStart = True
+
+            self.startReservation()
+
+    def startReservation(self):
+        isWeek = self.isWeek
+
+        if isWeek:
+            with open('macroDatasWeekEnd.csv', "r", encoding='utf-8-sig') as f:
+                reader = csv.reader(f)
+                macroInfoList = list(reader)
+                self.macroInfoList = macroInfoList
+        else:
+            with open('macroDatasWeekDay.csv', "r", encoding='utf-8-sig') as f:
+                reader = csv.reader(f)
+                macroInfoList = list(reader)
+                self.macroInfoList = macroInfoList
+
+        try:
+            t1 = threading.Thread(target=Reservation, args=(self,))
+            t1.daemon = True
+            t1.start()
+        except Exception as e:
+            pass
+
+
+    # 매크로 중단
+    @pyqtSlot()
+    def stopMacroAction(self):
+        self.btn_Stop.setEnabled(False)
+        self.btn_Start.setEnabled(True)
+
+        self.cb_StartCourt.setEnabled(True)
+        self.cb_EndCourt.setEnabled(True)
+
+        self.cb_StartTime.setEnabled(True)
+        self.cb_EndTime.setEnabled(True)
+
+        self.cal_UsedDate.setEnabled(True)
+
+        self.groupBox.setVisible(True)
+
+        self.setLog('매크로 중단')
+        self.isStart = False
+
+    # set Log
+    @pyqtSlot()
+    def setLog(self, msg):
+        currentTime = QTime.currentTime().toString()
+        self.tb_Log.append(currentTime + ' : ' + msg)
+    # ==========================================================================
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    myWindow = WindowClass()
+    myWindow.show()
+    app.exec_()
