@@ -7,8 +7,10 @@ from pytimekr import pytimekr
 
 import json
 import csv
+import time
 
 import requests
+
 from bs4 import BeautifulSoup
 
 import threading
@@ -24,10 +26,23 @@ url1 = 'https://www.ycs.or.kr/fmcs/4'
 url2 = 'https://www.ycs.or.kr/fmcs/4?action=write_proc'
 
 def Reservation(self):
+    # retry_strategy = Retry(
+    #     total=3,
+    #     backoff_factor=1,
+    #     status_forcelist=[500, 502, 503, 504]
+    # )
+
+    # adapter = HTTPAdapter(max_retries=retry_strategy)
+    # http = requests.Session()
+    # http.mount("https://", adapter)
+    # http.mount("http://", adapter)
+
+    startTime = time.time()
     login_url = 'https://www.ycs.or.kr/fmcs/133?referer=%2Ffmcs%2F132'
 
     # 세션 객체 생성
     session = requests.Session()
+    # client = httpx.Client(verify=False)
 
     login_page = session.get(login_url, verify=False)
 
@@ -81,7 +96,7 @@ def Reservation(self):
     if str(startCourt) != str(endCourt):
         for infinite in range(10000000000):
             courtNumberUp = int(startCourt)
-            while courtNumberUp <  int(endCourt) + 1:
+            while courtNumberUp < int(endCourt) + 1:
                 timeText = getTimeNo(macroInfoList, int(startTime), int(endTime), int(courtNumberUp), self.isWeek)
                 try:
                     if self.isStart:
@@ -91,24 +106,36 @@ def Reservation(self):
 
                         if response.status_code == 200:
                             headers = setReservationHeader()
+
+                            if response.text.__contains__('동일 아이디가 접속 중입니다.'):
+                                self.setLog('동일 아이디가 접속 중입니다.')
+                                self.stopMacroAction()
+                                continue
+                            elif response.text.__contains__('예약제한 1회를 초과하였습니다.'):
+                                self.setLog('예약제한 1회를 초과하였습니다.')
+                                self.stopMacroAction()
+                                continue
+
                             data = setReservationInfo(response, teamName)
                             response2 = session.post(url2, headers=headers, params=data, verify=False)
 
                             if response2.status_code == 200:
+                                print("요청이 성공하였습니다.")
                                 courtNumberUp += 1
                             else:
+                                print("요청이 실패하였습니다.")
                                 courtNumberUp += 1
                         else:
                             courtNumberUp += 1
                     else:
                         session.get('https://www.ycs.or.kr/fmcs/137', verify=False)
                         session.close()
+                        self.setLog('로그아웃 성공')
                         return;
                 except:
                     courtNumberUp += 1
     else:
         timeText = getTimeNo(macroInfoList, int(startTime), int(endTime), int(startCourt), self.isWeek)
-        print(timeText)
         for i in range(10000000000):
             try:
                 if self.isStart:
@@ -117,10 +144,17 @@ def Reservation(self):
                     response = session.post(url1, params=data, verify=False)
 
                     if response.status_code == 200:
+                        if response.text.__contains__('동일 아이디가 접속 중입니다.'):
+                           self.setLog('동일 아이디가 접속 중입니다.')
+                           self.stopMacroAction()
+                           continue
+                        elif response.text.__contains__('예약제한 1회를 초과하였습니다.'):
+                            self.setLog('예약제한 1회를 초과하였습니다.')
+                            self.stopMacroAction()
+
                         headers = setReservationHeader()
                         data = setReservationInfo(response, teamName)
                         response2 = session.post(url2, headers=headers, params=data, verify=False)
-
                         if response2.status_code == 200:
                             print("요청이 성공하였습니다.")
                         else:
@@ -128,9 +162,16 @@ def Reservation(self):
                 else:
                     session.get('https://www.ycs.or.kr/fmcs/137', verify=False)
                     session.close()
+                    self.setLog('로그아웃 성공')
                     return;
-            except:
+            except Exception as e:
+                print(e)
+
                 pass
+
+        endTime3 = time.time()
+
+        print("걸린 시간 : " + f"{endTime3 - startTime:.5f} sec")
 
 def setReservationInfo(response, teamName):
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -224,7 +265,7 @@ def getTimeNo(macroInfoList, rStartTime, rEndTime, rCourtNum, rIsWeek):
         return res[:-1]
 
 def setReservationData1(place_cd, time_no, rent_date):
-    return {
+    data = {
         'action': 'write',
         'comcd': 'YCS04',
         'part_cd': '02',
@@ -234,8 +275,10 @@ def setReservationData1(place_cd, time_no, rent_date):
         'rent_date': rent_date
     }
 
+    return data
+
 def setReservationData2(security_token, place_code, mem_no, start_date, end_date, time_datas, total_amount, mem_nm, users, mobile_tel):
-    return {
+    data = {
         'SecurityToken': security_token,
         'type': '',
         'company_code': 'YCS04',
@@ -265,8 +308,37 @@ def setReservationData2(security_token, place_code, mem_no, start_date, end_date
         'agree_use': 'Y'
     }
 
+    return data
+
+def setReservationHeader2():
+    data = {
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "content-Length": "30",
+        "Content-Type": "application/json",
+        "Cookie": "_ga=GA1.3.1956370294.1647303756; FMCSSESSIONID=9533F6CAD9AC8AE217B419488BF40300; kntool_popup_layerpopup_161=close; JSESSIONID=ABA4F89649BA9C7D11755FBA10F6E83D",
+        "Host": "www.ycs.or.kr",
+        "Origin": "https://www.ycs.or.kr",
+        "Pragma": "no-cache",
+        "Referer": "https://www.ycs.or.kr/macro_block/pc",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
+        "X-Requested-With": "XMLHttpRequest",
+
+        "sec-ch-ua": "\"Chromium\";v=\"113\", \"Google Chrome\";v=\"113\", \"Not:A-Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "Windows",
+    }
+
+    return data
+
 def setReservationHeader():
-    return {
+    data = {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3; q=0.7",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "en-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
@@ -287,7 +359,13 @@ def setReservationHeader():
         "Upgrade-Insecure-Requests": "1",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
     }
-	
+
+    return data
+
+def gzipJson(payload):
+    return payload
+
+
 class WindowClass(QMainWindow, form_class):
     def __init__(self):
         super().__init__()
@@ -381,7 +459,7 @@ class WindowClass(QMainWindow, form_class):
 
                 sStartTime = str(iStartTime)
 
-                if iStartTime <  10:
+                if iStartTime < 10:
                     sStartTime = '0' + sStartTime
 
                 self.cb_StartTime.addItem(sStartTime + ":00")
@@ -392,7 +470,7 @@ class WindowClass(QMainWindow, form_class):
 
                 sStartTime = str(iStartTime)
 
-                if iStartTime <  10:
+                if iStartTime < 10:
                     sStartTime = '0' + sStartTime
 
                 self.cb_StartTime.addItem(sStartTime + ":00")
@@ -496,8 +574,7 @@ class WindowClass(QMainWindow, form_class):
             loginPMessage = soup.find('p')
 
             if loginPMessage.text.find('양천구시설관리공단 사이트에 오신것을 환영합니다.') > 0:
-                QMessageBox.information(self, 'Success', '로그인 정보 확인 완료
-ADD 버튼을 통해 추가 해주세요.')
+                QMessageBox.information(self, 'Success', '로그인 정보 확인 완료\nADD 버튼을 통해 추가 해주세요.')
 
                 self.setBtnCss(True)
 
