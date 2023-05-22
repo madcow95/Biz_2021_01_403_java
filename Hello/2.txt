@@ -1,676 +1,391 @@
-< ?xml version="1.0" encoding="UTF-8"?>
-< ui version="4.0">
- < class>Mockdong< /class>
- < widget class="QMainWindow" name="Mockdong">
-  < property name="geometry">
-   < rect>
-    < x>0< /x>
-    < y>0< /y>
-    < width>620< /width>
-    < height>570< /height>
-   < /rect>
-  < /property>
-  < property name="minimumSize">
-   < size>
-    < width>620< /width>
-    < height>570< /height>
-   < /size>
-  < /property>
-  < property name="maximumSize">
-   < size>
-    < width>620< /width>
-    < height>570< /height>
-   < /size>
-  < /property>
-  < property name="sizeIncrement">
-   < size>
-    < width>600< /width>
-    < height>700< /height>
-   < /size>
-  < /property>
-  < property name="windowTitle">
-   < string>Mockdong< /string>
-  < /property>
-  < widget class="QWidget" name="centralwidget">
-   < widget class="QWidget" name="horizontalLayoutWidget">
-    < property name="geometry">
-     < rect>
-      < x>270< /x>
-      < y>10< /y>
-      < width>341< /width>
-      < height>41< /height>
-     < /rect>
-    < /property>
-    < layout class="QHBoxLayout" name="horizontalLayout">
-     < property name="spacing">
-      < number>6< /number>
-     < /property>
-     < property name="sizeConstraint">
-      < enum>QLayout::SetMinimumSize< /enum>
-     < /property>
-     < property name="bottomMargin">
-      < number>0< /number>
-     < /property>
-     < item>
-      < widget class="QPushButton" name="btn_Start">
-       < property name="cursor">
-        < cursorShape>PointingHandCursor< /cursorShape>
-       < /property>
-       < property name="text">
-        < string>START< /string>
-       < /property>
-      < /widget>
-     < /item>
-     < item>
-      < widget class="QPushButton" name="btn_Stop">
-       < property name="cursor">
-        < cursorShape>PointingHandCursor< /cursorShape>
-       < /property>
-       < property name="text">
-        < string>STOP< /string>
-       < /property>
-      < /widget>
-     < /item>
-    < /layout>
-   < /widget>
-   < widget class="QWidget" name="horizontalLayoutWidget_2">
-    < property name="geometry">
-     < rect>
-      < x>10< /x>
-      < y>10< /y>
-      < width>251< /width>
-      < height>41< /height>
-     < /rect>
-    < /property>
-    < layout class="QHBoxLayout" name="horizontalLayout_2">
-     < property name="leftMargin">
-      < number>10< /number>
-     < /property>
-     < item>
-      < widget class="QLabel" name="label">
-       < property name="minimumSize">
-        < size>
-         < width>0< /width>
-         < height>0< /height>
-        < /size>
-       < /property>
-       < property name="maximumSize">
-        < size>
-         < width>40< /width>
-         < height>16777215< /height>
-        < /size>
-       < /property>
-       < property name="text">
-        < string>USER : < /string>
-       < /property>
-       < property name="alignment">
-        < set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter< /set>
-       < /property>
-      < /widget>
-     < /item>
-     < item>
-      < widget class="QComboBox" name="cb_Users">
-       < property name="cursor">
-        < cursorShape>PointingHandCursor< /cursorShape>
-       < /property>
-      < /widget>
-     < /item>
-    < /layout>
-   < /widget>
-   < widget class="QWidget" name="gridLayoutWidget">
-    < property name="geometry">
-     < rect>
-      < x>10< /x>
-      < y>70< /y>
-      < width>371< /width>
-      < height>241< /height>
-     < /rect>
-    < /property>
-    < layout class="QGridLayout" name="gridLayout_4">
-     < item row="0" column="0">
-      < widget class="QCalendarWidget" name="cal_UsedDate">
-       < property name="cursor">
-        < cursorShape>PointingHandCursor< /cursorShape>
-       < /property>
-       < property name="styleSheet">
-        < string notr="true"/>
-       < /property>
-      < /widget>
-     < /item>
-    < /layout>
-   < /widget>
-   < widget class="QGroupBox" name="groupBox">
-    < property name="geometry">
-     < rect>
-      < x>10< /x>
-      < y>320< /y>
-      < width>301< /width>
-      < height>231< /height>
-     < /rect>
-    < /property>
-    < property name="styleSheet">
-     < string notr="true">color: green;
-border-style: solid;
-border-width: 2px;
-border-color: blue;
-border-radius: 3px;
-font: 14pt &quot;HY엽서L&quot;;< /string>
-    < /property>
-    < property name="title">
-     < string>ADD USER< /string>
-    < /property>
-    < widget class="QWidget" name="formLayoutWidget_3">
-     < property name="geometry">
-      < rect>
-       < x>10< /x>
-       < y>30< /y>
-       < width>281< /width>
-       < height>196< /height>
-      < /rect>
-     < /property>
-     < layout class="QFormLayout" name="formLayout_4">
-      < property name="leftMargin">
-       < number>5< /number>
-      < /property>
-      < property name="topMargin">
-       < number>10< /number>
-      < /property>
-      < property name="rightMargin">
-       < number>5< /number>
-      < /property>
-      < item row="1" column="0">
-       < widget class="QLabel" name="label_8">
-        < property name="styleSheet">
-         < string notr="true">border:none;
-color:black;< /string>
-        < /property>
-        < property name="text">
-         < string>NAME :< /string>
-        < /property>
-        < property name="alignment">
-         < set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter< /set>
-        < /property>
-        < property name="margin">
-         < number>5< /number>
-        < /property>
-       < /widget>
-      < /item>
-      < item row="1" column="1">
-       < widget class="QLineEdit" name="le_UserName">
-        < property name="styleSheet">
-         < string notr="true">border-style: solid;
-border-width: 1px;
-border-color: black;
-border-radius: 3px;
-font: 16pt &quot;HY견고딕&quot; black;
-color: black;< /string>
-        < /property>
-        < property name="alignment">
-         < set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter< /set>
-        < /property>
-       < /widget>
-      < /item>
-      < item row="2" column="0">
-       < widget class="QLabel" name="label_9">
-        < property name="styleSheet">
-         < string notr="true">border:none;
-color:black;< /string>
-        < /property>
-        < property name="text">
-         < string>      ID :< /string>
-        < /property>
-        < property name="alignment">
-         < set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter< /set>
-        < /property>
-        < property name="margin">
-         < number>5< /number>
-        < /property>
-       < /widget>
-      < /item>
-      < item row="2" column="1">
-       < widget class="QLineEdit" name="le_UserId">
-        < property name="styleSheet">
-         < string notr="true">border-style: solid;
-border-width: 1px;
-border-color: black;
-border-radius: 3px;
-font: 16pt &quot;HY견고딕&quot; black;
-color: black;< /string>
-        < /property>
-       < /widget>
-      < /item>
-      < item row="3" column="0">
-       < widget class="QLabel" name="label_10">
-        < property name="styleSheet">
-         < string notr="true">border:none;
-color:black;< /string>
-        < /property>
-        < property name="text">
-         < string>  PWD :< /string>
-        < /property>
-        < property name="margin">
-         < number>10< /number>
-        < /property>
-       < /widget>
-      < /item>
-      < item row="3" column="1">
-       < widget class="QLineEdit" name="le_UserPwd">
-        < property name="minimumSize">
-         < size>
-          < width>0< /width>
-          < height>26< /height>
-         < /size>
-        < /property>
-        < property name="styleSheet">
-         < string notr="true">border-style: solid;
-border-width: 1px;
-border-color: black;
-border-radius: 3px;
-font: 11pt &quot;HY견고딕&quot; black;
-color: black;< /string>
-        < /property>
-       < /widget>
-      < /item>
-      < item row="4" column="0">
-       < widget class="QPushButton" name="btn_CheckNAdd">
-        < property name="cursor">
-         < cursorShape>PointingHandCursor< /cursorShape>
-        < /property>
-        < property name="styleSheet">
-         < string notr="true">color:green;
-border-style: solid;
-border-width: 1px;
-border-color: green;
-border-radius: 3px;
-font: 16pt &quot;HY엽서L&quot;;< /string>
-        < /property>
-        < property name="text">
-         < string>CHECK< /string>
-        < /property>
-       < /widget>
-      < /item>
-      < item row="4" column="1">
-       < widget class="QPushButton" name="btn_UserAdd">
-        < property name="cursor">
-         < cursorShape>PointingHandCursor< /cursorShape>
-        < /property>
-        < property name="styleSheet">
-         < string notr="true">color: red;
-border-style: solid;
-border-width: 1px;
-border-color: red;
-border-radius: 3px;
-font: 16pt &quot;HY엽서L&quot;;
-text-decoration: line-through;< /string>
-        < /property>
-		 < property name="text">
-         < string>ADD< /string>
-        < /property>
-        < property name="checkable">
-         < bool>true< /bool>
-        < /property>
-        < property name="autoDefault">
-         < bool>true< /bool>
-        < /property>
-        < property name="default">
-         < bool>true< /bool>
-        < /property>
-        < property name="flat">
-         < bool>true< /bool>
-        < /property>
-       < /widget>
-      < /item>
-      < item row="0" column="0" colspan="2">
-       < widget class="QLabel" name="label_11">
-        < property name="minimumSize">
-         < size>
-          < width>0< /width>
-          < height>40< /height>
-         < /size>
-        < /property>
-        < property name="toolTip">
-         < string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'noto','notojp','notokr','Helvetica','Microsoft YaHei','Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Dotum','돋움','sans-serif'; font-size:40px; color:#000000; background-color:#fdfdfd;&quot;&gt;Add the users you need to log in.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;< /string>
-        < /property>
-        < property name="whatsThis">
-         < string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;< /string>
-        < /property>
-        < property name="styleSheet">
-         < string notr="true">border:none;
-color: black;< /string>
-        < /property>
-        < property name="text">
-         < string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;ADD NEW LOGIN USER&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;< /string>
-        < /property>
-        < property name="alignment">
-         < set>Qt::AlignCenter< /set>
-        < /property>
-        < property name="margin">
-         < number>5< /number>
-        < /property>
-       < /widget>
-      < /item>
-     < /layout>
-    < /widget>
-   < /widget>
-   < widget class="QWidget" name="formWidget" native="true">
-    < property name="geometry">
-     < rect>
-      < x>389< /x>
-      < y>70< /y>
-      < width>221< /width>
-      < height>111< /height>
-     < /rect>
-    < /property>
-    < property name="styleSheet">
-     < string notr="true">border-style: solid;
-border-width: 1px;
-border-color: black;
-border-radius: 3px;< /string>
-    < /property>
-    < layout class="QFormLayout" name="formLayout_2">
-     < property name="leftMargin">
-      < number>5< /number>
-     < /property>
-     < property name="rightMargin">
-      < number>5< /number>
-     < /property>
-     < item row="1" column="0">
-      < widget class="QLabel" name="label_4">
-       < property name="styleSheet">
-        < string notr="true">font: 9pt &quot;궁서&quot;;
-border:none;< /string>
-       < /property>
-       < property name="text">
-        < string>START COURT : < /string>
-       < /property>
-       < property name="alignment">
-        < set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter< /set>
-       < /property>
-      < /widget>
-     < /item>
-     < item row="2" column="0">
-      < widget class="QLabel" name="label_5">
-       < property name="styleSheet">
-        < string notr="true">font: 9pt &quot;궁서&quot;;
-border:none;< /string>
-       < /property>
-       < property name="text">
-        < string>   END COURT : < /string>
-       < /property>
-       < property name="alignment">
-        < set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter< /set>
-       < /property>
-       < property name="margin">
-        < number>1< /number>
-       < /property>
-      < /widget>
-     < /item>
-     < item row="0" column="0" colspan="2">
-      < widget class="QLabel" name="label_2">
-       < property name="minimumSize">
-        < size>
-         < width>0< /width>
-         < height>50< /height>
-        < /size>
-       < /property>
-       < property name="maximumSize">
-        < size>
-         < width>16777215< /width>
-         < height>50< /height>
-        < /size>
-       < /property>
-       < property name="styleSheet">
-        < string notr="true">font: 14pt &quot;HY엽서M&quot;;
-border:none;< /string>
-       < /property>
-       < property name="text">
-        < string>CHOOSE COURT< /string>
-       < /property>
-       < property name="alignment">
-        < set>Qt::AlignCenter< /set>
-       < /property>
-       < property name="margin">
-        < number>9< /number>
-       < /property>
-      < /widget>
-     < /item>
-     < item row="1" column="1">
-      < widget class="QComboBox" name="cb_StartCourt">
-       < property name="cursor">
-        < cursorShape>PointingHandCursor< /cursorShape>
-       < /property>
-      < /widget>
-     < /item>
-     < item row="2" column="1">
-      < widget class="QComboBox" name="cb_EndCourt">
-       < property name="cursor">
-        < cursorShape>PointingHandCursor< /cursorShape>
-       < /property>
-      < /widget>
-     < /item>
-    < /layout>
-   < /widget>
-   < widget class="Line" name="line">
-    < property name="geometry">
-     < rect>
-      < x>390< /x>
-      < y>182< /y>
-      < width>221< /width>
-      < height>16< /height>
-     < /rect>
-    < /property>
-    < property name="orientation">
-     < enum>Qt::Horizontal< /enum>
-    < /property>
-   < /widget>
-   < widget class="QScrollArea" name="scrollArea">
-    < property name="geometry">
-     < rect>
-      < x>320< /x>
-      < y>321< /y>
-      < width>291< /width>
-      < height>171< /height>
-     < /rect>
-    < /property>
-    < property name="styleSheet">
-     < string notr="true">border-style: solid;
-border-width: 1px;
-border-color: blue;
-border-radius: 3px;< /string>
-    < /property>
-    < property name="widgetResizable">
-     < bool>true< /bool>
-    < /property>
-    < widget class="QWidget" name="scrollAreaWidgetContents">
-     < property name="geometry">
-      < rect>
-       < x>0< /x>
-       < y>0< /y>
-       < width>289< /width>
-       < height>169< /height>
-      < /rect>
-     < /property>
-     < widget class="QWidget" name="gridLayoutWidget_3">
-      < property name="geometry">
-       < rect>
-        < x>-1< /x>
-        < y>-1< /y>
-        < width>291< /width>
-        < height>171< /height>
-       < /rect>
-      < /property>
-      < layout class="QGridLayout" name="gridLayout_6">
-       < item row="0" column="0">
-        < widget class="QTextBrowser" name="tb_Log"/>
-       < /item>
-      < /layout>
-     < /widget>
-    < /widget>
-   < /widget>
-   < widget class="QWidget" name="gridLayoutWidget_2">
-    < property name="geometry">
-     < rect>
-      < x>320< /x>
-      < y>498< /y>
-      < width>291< /width>
-      < height>52< /height>
-     < /rect>
-    < /property>
-    < layout class="QGridLayout" name="gridLayout_5">
-     < item row="0" column="0">
-      < widget class="QPushButton" name="btn_Exit">
-       < property name="minimumSize">
-        < size>
-         < width>0< /width>
-         < height>50< /height>
-        < /size>
-       < /property>
-       < property name="font">
-        < font>
-         < family>HY견고딕< /family>
-         < pointsize>16< /pointsize>
-         < weight>50< /weight>
-         < italic>false< /italic>
-         < bold>false< /bold>
-         < strikeout>false< /strikeout>
-        < /font>
-       < /property>
-       < property name="cursor">
-        < cursorShape>PointingHandCursor< /cursorShape>
-       < /property>
-       < property name="styleSheet">
-        < string notr="true">background: rgb(255, 223, 60);
-font: 16pt &quot;HY견고딕&quot;;
-border-style: solid;
-border-width: 1px;
-border-color: black;
-border-radius: 3px;< /string>
-       < /property>
-       < property name="text">
-        < string>EXIT< /string>
-       < /property>
-      < /widget>
-     < /item>
-    < /layout>
-   < /widget>
-   < widget class="QWidget" name="formWidget_2" native="true">
-    < property name="geometry">
-     < rect>
-      < x>390< /x>
-      < y>200< /y>
-      < width>221< /width>
-      < height>111< /height>
-     < /rect>
-    < /property>
-    < property name="styleSheet">
-     < string notr="true">border-style: solid;
-border-width: 1px;
-border-color: black;
-border-radius: 3px;< /string>
-    < /property>
-    < layout class="QFormLayout" name="formLayout_3">
-     < property name="leftMargin">
-      < number>5< /number>
-     < /property>
-     < property name="rightMargin">
-      < number>5< /number>
-     < /property>
-     < item row="1" column="0">
-      < widget class="QLabel" name="label_6">
-       < property name="styleSheet">
-        < string notr="true">font: 9pt &quot;궁서&quot;;
-border:none;< /string>
-       < /property>
-       < property name="text">
-        < string>START TIME : < /string>
-       < /property>
-       < property name="alignment">
-        < set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter< /set>
-       < /property>
-      < /widget>
-     < /item>
-     < item row="2" column="0">
-      < widget class="QLabel" name="label_7">
-       < property name="styleSheet">
-        < string notr="true">font: 9pt &quot;궁서&quot;;
-border:none;< /string>
-       < /property>
-       < property name="text">
-        < string>   END TIME : < /string>
-       < /property>
-       < property name="alignment">
-        < set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter< /set>
-       < /property>
-       < property name="margin">
-        < number>1< /number>
-       < /property>
-      < /widget>
-     < /item>
-     < item row="0" column="0" colspan="2">
-      < widget class="QLabel" name="label_3">
-       < property name="minimumSize">
-        < size>
-         < width>0< /width>
-         < height>50< /height>
-        < /size>
-       < /property>
-       < property name="styleSheet">
-        < string notr="true">font: 14pt &quot;HY엽서M&quot;;
-border:none;< /string>
-       < /property>
-       < property name="text">
-        < string>CHOOSE TIME< /string>
-       < /property>
-       < property name="alignment">
-        < set>Qt::AlignCenter< /set>
-       < /property>
-       < property name="margin">
-        < number>9< /number>
-       < /property>
-      < /widget>
-     < /item>
-     < item row="1" column="1">
-      < widget class="QComboBox" name="cb_StartTime">
-       < property name="cursor">
-        < cursorShape>PointingHandCursor< /cursorShape>
-       < /property>
-      < /widget>
-     < /item>
-     < item row="2" column="1">
-      < widget class="QComboBox" name="cb_EndTime">
-       < property name="cursor">
-        < cursorShape>PointingHandCursor< /cursorShape>
-       < /property>
-      < /widget>
-     < /item>
-    < /layout>
-   < /widget>
-   < widget class="Line" name="line_2">
-    < property name="geometry">
-     < rect>
-      < x>10< /x>
-      < y>52< /y>
-      < width>601< /width>
-      < height>16< /height>
-     < /rect>
-    < /property>
-    < property name="orientation">
-     < enum>Qt::Horizontal< /enum>
-    < /property>
-   < /widget>
-  < /widget>
-  < widget class="QMenuBar" name="menubar">
-   < property name="geometry">
-    < rect>
-     < x>0< /x>
-     < y>0< /y>
-     < width>620< /width>
-     < height>21< /height>
-    < /rect>
-   < /property>
-  < /widget>
-  < widget class="QStatusBar" name="statusbar"/>
- < /widget>
- < resources/>
- < connections/>
-< /ui>
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5 import uic
+import shutil
+from pytimekr import pytimekr
+from MacroController import *
+
+# UI 파일 위치
+form_class = uic.loadUiType('Macro.ui')[0]
+
+
+def setCourt(self, start):
+    if self.cb_StartCourt.count() > 0:
+        self.cb_EndCourt.clear()
+
+        # self.cb_EndCourt.addItem(str(start))
+        for i in range(start, 19):
+            self.cb_EndCourt.addItem(str(i))
+    else:
+        # self.cb_StartCourt.addItem(str(start))
+        # self.cb_EndCourt.addItem(str(start))
+        for i in range(start, 19):
+            self.cb_StartCourt.addItem(str(i))
+            self.cb_EndCourt.addItem(str(i))
+
+
+def setReservationTime(self, usedDate, week, holidays):
+    self.cb_StartTime.clear()
+    self.cb_EndTime.clear()
+
+    # 빨간날
+    if (usedDate in holidays) or (week == 6 or week == 7):
+        self.isWeek = True
+        for i in range(7):
+            iStartTime = (i * 3) + 9 - i
+
+            sStartTime = str(iStartTime)
+
+            if iStartTime < 10:
+                sStartTime = '0' + sStartTime
+
+            self.cb_StartTime.addItem(sStartTime + ":00")
+    else:
+        self.isWeek = False
+        for i in range(13):
+            iStartTime = 9 + i
+
+            sStartTime = str(iStartTime)
+
+            if iStartTime < 10:
+                sStartTime = '0' + sStartTime
+
+            self.cb_StartTime.addItem(sStartTime + ":00")
+
+def setReservationEndTime(ui, startTimeIndeex, usedDate, week, holidays):
+    ui.clear()
+
+    # 빨간날
+    if (usedDate in holidays) or (week == 6 or week == 7):
+        for i in range(startTimeIndeex, 7):
+            iEndtime = (i * 3) + 11 - i
+            sEndTime = str(iEndtime)
+
+            if iEndtime == 23:
+                sEndTime = str(iEndtime - 1)
+
+            ui.addItem(sEndTime + ":00")
+    else:
+        for i in range(startTimeIndeex, 13):
+            iEndtime = 10 + i
+            sEndTime = str(iEndtime)
+
+            if iEndtime == 23:
+                sEndTime = str(iEndtime - 1)
+
+            ui.addItem(sEndTime + ":00")
+
+def validation(self, **kwargs):
+    valRes = True
+
+    if kwargs["teamName"] == '':
+        self.setLog('대표자 미 입력')
+        valRes = False
+
+    if kwargs["userCount"] == '':
+        self.setLog('참가 인원 미 입력')
+        valRes = False
+
+    if kwargs["purpose"] == '':
+        self.setLog('이용 목적 미 입력')
+        valRes = False
+
+    if kwargs["usedDate"] is None:
+        self.setLog('이용 날짜 미 입력')
+        valRes = False
+
+    if kwargs["startCourt"] == '':
+        self.setLog('시작 코트 미 입력')
+        valRes = False
+
+    if kwargs["endCourt"] == '':
+        self.setLog('종료 코트 미 입력')
+        valRes = False
+
+    if kwargs["startTime"] == '':
+        self.setLog('시작 시간 미 입력')
+        valRes = False
+
+    if kwargs["endTime"] == '':
+        self.setLog('종료 시간 미 입력')
+        valRes = False
+
+        if not valRes:
+            QMessageBox.question(self, 'Warning', '유효성 검증 오류!\nLog를 확인 하세요.', QMessageBox.Ok)
+        else:
+            iStartTime = int(kwargs["startTime"].split(':')[0])
+            iEndTime = int(kwargs["endTime"].split(':')[0])
+
+            if iEndTime - iStartTime == 1:
+                QMessageBox.question(self, 'Warning', '해당 시설을 예약하기 위한 최소 시간이 미달되었습니다.', QMessageBox.Ok)
+                self.setLog('해당 시설을 예약 하기 위한 최소 시간이 미달되었습니다.')
+                valRes = False
+            elif iEndTime - iStartTime > 4:
+                QMessageBox.question(self, 'Warning', '해당 시설을 예약하기 위한 최대 시간을 초과하였습니다.', QMessageBox.Ok)
+                self.setLog('해당 시설을 예약 하기 위한 최대 시간을 초과하였습니다.')
+                valRes = False
+
+    return valRes
+
+class Worker(QThread):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent  # self.parent를 사용하여 WindowClass 위젯을 제어할 수 있다.
+
+    def run(self):
+        if self.parent.rm is None:
+            self.parent.rm = RunMacro(self.parent)
+
+        try:
+            self.parent.rm.moveToLoginPage()
+        except Exception as e:
+            self.parent.rm.quitDriver()
+            self.parent.rm = RunMacro(self.parent)
+            self.parent.rm.moveToLoginPage()
+
+class StartMacro(QThread):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        # self.parent.rm = RunMacro(self.parent)
+
+    def run(self):
+        self.parent.rm.startMacro()
+
+class StopMacro(QThread):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+
+    def run(self):
+        self.parent.rm.stopMacro()
+
+
+class Worker2(QThread):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent  # self.parent를 사용하여 WindowClass 위젯을 제어할 수 있다.
+
+    def run(self):
+        if self.parent.rm is not None:
+            self.parent.rm.quitDriver()
+            print(self.parent.tb_Log.toPlainText())
+
+
+class WindowClass(QMainWindow, form_class):
+    def __init__(self):
+        super().__init__()
+
+        self.usedDate = None
+        self.rm = None
+        self.wk = Worker(self)
+        self.isWeek = False
+
+        fHolidays = pytimekr.holidays()  # holidays메소드는 리스트 형태로 관련값 반환
+        holidays = []
+        for fHoliday in fHolidays:
+            holidays.append(fHoliday.strftime('%Y%m%d'))
+
+        holidays.append('20220912')
+        self.holidays = holidays
+
+        self.setWindowIcon(QIcon('logo.png'))
+
+        self.setupUi(self)
+
+        self.qPixmapVar = QPixmap()
+        self.qPixmapVar.load("courtView.jpg")
+        self.lbl_Img.setPixmap(self.qPixmapVar)
+
+        self.le_Team.setText('1')
+        self.le_Purpose.setText('게임')
+
+        # 현재 시간 표시
+        self.timer = QTimer(self)
+        self.timer.setInterval(100)
+        self.timer.timeout.connect(self.timeout)
+        self.timer.start()
+
+        self.cal_UsedDate.showToday()
+
+        # 공휴일 표시
+        fm = QTextCharFormat()
+        fm.setForeground(Qt.red)
+        fm.setBackground(Qt.yellow)
+
+        # 날짜 선택
+        self.cal_UsedDate.setGridVisible(True)
+        for holiday in self.holidays:
+            dHoliday = QDate.fromString(str(holiday), "yyyyMMdd")
+            self.cal_UsedDate.setDateTextFormat(dHoliday, fm)
+
+        self.cal_UsedDate.clicked.connect(self.calendarClicked)
+
+        # 참가 인원 ComboBox
+        for i in range(1, 5):
+            self.cb_UsersCount.addItem(str(i))
+
+        # 시작/종료 코트
+        setCourt(self, 1)
+
+        self.cb_StartCourt.currentIndexChanged.connect(self.changeEndCourtComboBoxAction)
+        self.cb_StartTime.currentIndexChanged.connect(self.changeEndTimeComboBoxAction)
+
+        # 버튼
+        # 로그인 페이지 열기
+        self.btn_OpenPage.clicked.connect(self.openPageAction)
+
+        # 캐시 삭제
+        self.btn_ClearCache.clicked.connect(self.clearCacheAction)
+
+        # 시작
+        self.btn_Start.clicked.connect(self.startMacroAction)
+
+        # 정지
+        self.btn_Stop.clicked.connect(self.stopMacroAction)
+        self.btn_Stop.setEnabled(False)
+
+        # 종료 버튼 - btn_Exit
+        self.btn_Exit.clicked.connect(self.exitProgram)
+        self.btn_Exit.clicked.connect(QCoreApplication.instance().quit)
+
+    # Function
+    # ==========================================================================
+    # selectedUserDate
+    def calendarClicked(self):
+        week = self.cal_UsedDate.selectedDate().dayOfWeek()
+        # self.setLog(str(week)) 6, 7이 주말
+
+        self.usedDate = self.cal_UsedDate.selectedDate().toString('yyyyMMdd')
+        self.setLog("선택 한 날짜 : " + self.usedDate)
+
+        self.lbl_SelectedDate.setText('이용 날짜 : ' + self.cal_UsedDate.selectedDate().toString('yyyy-MM-dd'))
+
+        setReservationTime(self, self.usedDate, week, self.holidays)
+
+    # exitProgram
+    def exitProgram(self):
+        Worker2(self).start()
+
+    # 로그인 페이지 열기
+    def openPageAction(self):
+        self.setLog("로그인 페이지 Open")
+        self.wk.start()
+
+    # 캐시 삭제
+    def clearCacheAction(self):
+        try:
+            shutil.rmtree(r"c:\chrometemp")  # 쿠키 / 캐쉬파일 삭제
+            QMessageBox.question(self, 'Info', '크롬 캐시 삭제 완료!', QMessageBox.Ok)
+            self.setLog("크롬 캐시 삭제 완료!")
+        except Exception as e:
+            if e.__class__.__name__ == 'FileNotFoundError':
+                self.setLog("삭제 할 캐시가 없습니다.")
+                QMessageBox.question(self, 'Warning', '삭제 할 캐시가 없습니다.', QMessageBox.Ok)
+            else:
+                self.setLog("열려 있는 크롬을 닫고 실행 하세요.")
+                QMessageBox.question(self, 'Warning', '열려 있는 크롬을 닫고 실행 하세요.', QMessageBox.Ok)
+
+            pass
+
+    # 매크로 시작
+    @pyqtSlot()
+    def startMacroAction(self):
+        # 대표자
+        teamName = self.le_Team.text()
+        # 참가 인원
+        userCount = self.cb_UsersCount.currentText()
+        # 이용 목적
+        purpose = self.le_Purpose.text()
+        # 이용 날짜
+        # self.usedDate
+        # 시작 코트
+        startCourt = self.cb_StartCourt.currentText()
+        # 종료 코트
+        endCourt = self.cb_EndCourt.currentText()
+        # 시작 시간
+        startTime = self.cb_StartTime.currentText()
+        # 종료 시간
+        endTime = self.cb_EndTime.currentText()
+
+        valRes = True # validation(self, teamName=teamName, userCount=userCount, purpose=purpose, usedDate=self.usedDate, startCourt=startCourt, endCourt=endCourt, startTime=startTime, endTime=endTime)
+
+        if valRes:
+            # if self.rm is None:
+            #     QMessageBox.question(self, 'Warning', '로그인 페이지를 먼저 열어주세요.', QMessageBox.Ok)
+            #     self.setLog('로그인 페이지를 먼저 열어주세요.')
+            # else:
+            self.btn_Start.setEnabled(False)
+            self.btn_Stop.setEnabled(True)
+
+            self.btn_OpenPage.setEnabled(False)
+            self.btn_ClearCache.setEnabled(False)
+
+            self.le_Team.setEnabled(False)
+            self.le_Purpose.setEnabled(False)
+
+            self.cb_UsersCount.setEnabled(False)
+            self.cb_StartCourt.setEnabled(False)
+            self.cb_EndCourt.setEnabled(False)
+            self.cb_StartTime.setEnabled(False)
+            self.cb_EndTime.setEnabled(False)
+
+            self.cal_UsedDate.setEnabled(False)
+            StartMacro(self).start()
+
+    # 매크로 중단
+    @pyqtSlot()
+    def stopMacroAction(self):
+        self.btn_Stop.setEnabled(False)
+        self.btn_Start.setEnabled(True)
+
+        self.btn_OpenPage.setEnabled(True)
+        self.btn_ClearCache.setEnabled(True)
+
+        self.le_Team.setEnabled(True)
+        self.le_Purpose.setEnabled(True)
+
+        self.cb_UsersCount.setEnabled(True)
+        self.cb_StartCourt.setEnabled(True)
+        self.cb_EndCourt.setEnabled(True)
+        self.cb_StartTime.setEnabled(True)
+        self.cb_EndTime.setEnabled(True)
+
+        self.cal_UsedDate.setEnabled(True)
+        StopMacro(self).start()
+
+    # timeOut
+    def timeout(self):
+        sender = self.sender()
+        currentTime = QTime.currentTime().toString("hh:mm:ss")
+        if id(sender) == id(self.timer):
+            self.ln_CurrentTime.display(currentTime)
+
+    # 종료 코트 CB
+    def changeEndCourtComboBoxAction(self):
+        startCourtNum = int(self.cb_StartCourt.currentText())
+
+        setCourt(self, startCourtNum)
+
+    # 종료 시간 CB
+    def changeEndTimeComboBoxAction(self):
+        week = self.cal_UsedDate.selectedDate().dayOfWeek()
+        # self.setLog(str(week)) 6, 7이 주말
+
+        setReservationEndTime(self.cb_EndTime, self.cb_StartTime.currentIndex(), self.usedDate, week, self.holidays)
+
+    # set Log
+    @pyqtSlot()
+    def setLog(self, msg):
+        currentTime = QTime.currentTime().toString()
+        self.tb_Log.append(currentTime + ' : ' + msg)
+    # ==========================================================================
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    myWindow = WindowClass()
+    myWindow.show()
+    app.exec_()
