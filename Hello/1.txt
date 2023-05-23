@@ -1,13 +1,14 @@
 import sys
+import time
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
 from pytimekr import pytimekr
 
-import json
 import csv
-import time
+import json
 
 import requests
 
@@ -37,7 +38,6 @@ def Reservation(self):
     # http.mount("https://", adapter)
     # http.mount("http://", adapter)
 
-    startTime = time.time()
     login_url = 'https://www.ycs.or.kr/fmcs/133?referer=%2Ffmcs%2F132'
 
     # 세션 객체 생성
@@ -105,8 +105,6 @@ def Reservation(self):
                         response = session.post(url1, params=data, verify=False)
 
                         if response.status_code == 200:
-                            headers = setReservationHeader()
-
                             if response.text.__contains__('동일 아이디가 접속 중입니다.'):
                                 self.setLog('동일 아이디가 접속 중입니다.')
                                 self.stopMacroAction()
@@ -115,16 +113,44 @@ def Reservation(self):
                                 self.setLog('예약제한 1회를 초과하였습니다.')
                                 self.stopMacroAction()
                                 continue
+                            elif response.text.__contains__('예약 가능일(시간)이 아닙니다.'):
+                                self.setLog('예약 가능일(시간)이 아닙니다.')
+                                self.stopMacroAction()
+                                continue
 
-                            data = setReservationInfo(response, teamName)
+                            isCheckRes = possibleReservationCheck(startCourt, usedDate, startTime, endTime, self.isWeek)
+
+                            if not isCheckRes:
+                                self.setLog('예약이 이미 존재 합니다.')
+                                continue
+
+                            self.setLog('빈 코트 발견! 예약 시도 중...')
+
+                            soup = BeautifulSoup(response.text, 'html.parser')
+                            mobileTel = getInputValue(soup, 'input', 'mobile_tel')
+                            phoneNum = mobileTel.replace('-', '')
+                            print(phoneNum)
+                            params = {"phone_number": phoneNum}
+                            phoneVerifyRes = requests.post('https://www.ycs.or.kr/macro_block/createNumber',
+                                                           headers=setReservationHeader2(), data=json.dumps(params),
+                                                           verify=False)
+
+                            if phoneVerifyRes.status_code == 200 and phoneVerifyRes.text == 'OK':
+                                self.setLog('문자 메시지 전송을 완료 했습니다.\n1.5초 후 예약 완료 됩니다.')
+
+                            time.sleep(1.5)
+
+                            headers = setReservationHeader()
+                            data = setReservationInfo(soup, teamName)
                             response2 = session.post(url2, headers=headers, params=data, verify=False)
 
                             if response2.status_code == 200:
-                                print("요청이 성공하였습니다.")
-                                courtNumberUp += 1
-                            else:
-                                print("요청이 실패하였습니다.")
-                                courtNumberUp += 1
+                                if response2.text.__contains__('테니스 코트 무단 양도'):
+                                    self.setLog('계정이 정지되었습니다. 다른 계정으로 시도하세요.')
+                                    self.stopMacroAction()
+                                else:
+                                    self.setLog('예약 시도 성공!')
+                                    courtNumberUp += 1
                         else:
                             courtNumberUp += 1
                     else:
@@ -151,14 +177,42 @@ def Reservation(self):
                         elif response.text.__contains__('예약제한 1회를 초과하였습니다.'):
                             self.setLog('예약제한 1회를 초과하였습니다.')
                             self.stopMacroAction()
+                            continue
+                        elif response.text.__contains__('예약 가능일(시간)이 아닙니다.'):
+                            self.setLog('예약 가능일(시간)이 아닙니다.')
+                            self.stopMacroAction()
+                            continue
+
+                        isCheckRes = possibleReservationCheck(startCourt, usedDate, startTime, endTime, self.isWeek)
+
+                        if not isCheckRes:
+                            self.setLog('예약이 이미 존재 합니다.')
+                            continue
+
+                        self.setLog('빈 코트 발견! 예약 시도 중...')
+
+                        soup = BeautifulSoup(response.text, 'html.parser')
+                        mobileTel = getInputValue(soup, 'input', 'mobile_tel')
+                        phoneNum = mobileTel.replace('-', '')
+                        print(phoneNum)
+                        params = {"phone_number": phoneNum}
+                        phoneVerifyRes = requests.post('https://www.ycs.or.kr/macro_block/createNumber', headers=setReservationHeader2(), data=json.dumps(params), verify=False)
+
+                        if phoneVerifyRes.status_code == 200 and phoneVerifyRes.text == 'OK':
+                            self.setLog('문자 메시지 전송을 완료 했습니다.\n1.5초 후 예약 완료 됩니다.')
+
+                        time.sleep(1.5)
 
                         headers = setReservationHeader()
-                        data = setReservationInfo(response, teamName)
+                        data = setReservationInfo(soup, teamName)
                         response2 = session.post(url2, headers=headers, params=data, verify=False)
+
                         if response2.status_code == 200:
-                            print("요청이 성공하였습니다.")
-                        else:
-                            print("요청이 실패하였습니다.")
+                            if response2.text.__contains__('테니스 코트 무단 양도'):
+                                self.setLog('계정이 정지되었습니다. 다른 계정으로 시도하세요.')
+                                self.stopMacroAction()
+                            else:
+                                self.setLog('예약 시도 성공!')
                 else:
                     session.get('https://www.ycs.or.kr/fmcs/137', verify=False)
                     session.close()
@@ -169,13 +223,47 @@ def Reservation(self):
 
                 pass
 
-        endTime3 = time.time()
+def possibleReservationCheck(courtNum, usedDate, startTime, endTime, isWeek):
+    checkStartTimeIArr = []
+    if isWeek:
+        if int(endTime) == 22:
+            checkStartTimeIArr = [19, 21]
+        else:
+            if int(startTime) == int(endTime) - 2:
+                checkStartTimeIArr = [int(startTime)]
+            else:
+                checkStartTimeIArr = [int(startTime), int(endTime) - 2]
+    else:
+        for i in range(int(startTime), int(endTime)):
+            checkStartTimeIArr.append(i)
 
-        print("걸린 시간 : " + f"{endTime3 - startTime:.5f} sec")
+    checkStartTimeSArr = []
 
-def setReservationInfo(response, teamName):
-    soup = BeautifulSoup(response.text, 'html.parser')
+    for checkStartTimeI in checkStartTimeIArr:
+        if int(checkStartTimeI) == 9:
+            timeText = '0' + str(checkStartTimeI) + ':00'
+        else:
+            timeText = str(checkStartTimeI) + ':00'
 
+        checkStartTimeSArr.append(timeText)
+
+    placeCode = str(courtNum)
+    url = 'https://www.ycs.or.kr/rest/facilities/place_time_state_list?company_code=YCS04&part_code=02&place_code=' + \
+          placeCode + '&base_date=' + usedDate + '&rent_type=1001'
+
+    result = requests.get(url, verify=False)
+    soup = BeautifulSoup(result.text, 'html.parser')
+    datas = json.loads(soup.text)
+
+    isCheckRes = True
+    for data in datas:
+        for checkStartTimeS in checkStartTimeSArr:
+            if data['start_time'] == checkStartTimeS and data['use_yn'] == 'Y':
+                isCheckRes = False
+
+    return isCheckRes
+
+def setReservationInfo(soup, teamName):
     securityToken = getInputValue(soup, 'input', 'SecurityToken')
 
     placeCode = getInputValue(soup, 'input', 'place_code')
@@ -318,7 +406,7 @@ def setReservationHeader2():
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
         "content-Length": "30",
-        "Content-Type": "application/json",
+        "Content-Type": "application/json; charset=utf-8",
         "Cookie": "_ga=GA1.3.1956370294.1647303756; FMCSSESSIONID=9533F6CAD9AC8AE217B419488BF40300; kntool_popup_layerpopup_161=close; JSESSIONID=ABA4F89649BA9C7D11755FBA10F6E83D",
         "Host": "www.ycs.or.kr",
         "Origin": "https://www.ycs.or.kr",
@@ -329,7 +417,6 @@ def setReservationHeader2():
         "Sec-Fetch-Site": "same-origin",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
         "X-Requested-With": "XMLHttpRequest",
-
         "sec-ch-ua": "\"Chromium\";v=\"113\", \"Google Chrome\";v=\"113\", \"Not:A-Brand\";v=\"24\"",
         "sec-ch-ua-mobile": "?0",
         "sec-ch-ua-platform": "Windows",
@@ -419,6 +506,8 @@ class WindowClass(QMainWindow, form_class):
         self.setCourt(1)
         self.setReservationTime()
         self.setReservationEndTime()
+
+        self.tb_Log.verticalScrollBar().setValue(self.tb_Log.verticalScrollBar().maximum())
 
         self.cb_StartCourt.currentIndexChanged.connect(self.changeEndCourtComboBoxAction)
         self.cb_StartTime.currentIndexChanged.connect(self.changeEndTimeComboBoxAction)
@@ -831,6 +920,15 @@ class WindowClass(QMainWindow, form_class):
     def setLog(self, msg):
         currentTime = QTime.currentTime().toString()
         self.tb_Log.append(currentTime + ' : ' + msg)
+
+        verScrollBar = self.tb_Log.verticalScrollBar()
+        scrollIsAtEnd = verScrollBar.maximum() - verScrollBar.value() <= 10
+
+        if not scrollIsAtEnd:
+            verScrollBar.setValue(verScrollBar.maximum())  # Scrolls to the bottom
+            # horScrollBar.setValue(0)  # scroll to the left
+
+
     # ==========================================================================
 
 
