@@ -69,3 +69,7 @@ https://www.peterpanz.com/house/14085067?utm_source=naver&utm_medium=link
 # 23/04/18
 @State, @ObservedObject
 https://medium.com/harrythegreat/swiftui-%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC-5%ED%8E%B8-state-binding-observedobject-83c00c3317cb
+
+
+# 23/05/24
+https://velog.io/@hangem422/clean-code-comment -> 주석에 관한 내용
