@@ -73,3 +73,40 @@ https://medium.com/harrythegreat/swiftui-%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC-5%
 
 # 23/05/24
 https://velog.io/@hangem422/clean-code-comment -> 주석에 관한 내용
+
+// 14916, 
+func readLine() -> String? {
+    return ""
+}
+
+import Foundation
+
+func getLottoNumbers() -> [Int] {
+    var lottoNumbers = Set<Int>()
+    while lottoNumbers.count != 6, let randomNumber = (1...45).randomElement() {
+        lottoNumbers.insert(randomNumber)
+    }
+    return Array(lottoNumbers)
+}
+
+func checkLottoNumber(myNumbers: [Int], goal: [Int]) -> [Int] {
+    let sameNumbers: [Int] = goal.filter{ myNumbers.contains($0) }
+    guard sameNumbers.count > 0 else {
+        return []
+    }
+    return sameNumbers
+}
+
+var lottoRecord: [String: [Int]] = [:]
+
+for i in 1...5 {
+    lottoRecord["\(i)회차"] = getLottoNumbers()
+}
+
+let targetRound = 4
+if let targetRoundLotto = lottoRecord["\(targetRound)회차"] {
+    print("\(targetRound)회차의 로또 당첨 번호는 \(targetRoundLotto.sorted().map{ String($0) }.joined(separator: ", ")) 입니다.")
+} else {
+    print("해당 회차의 로또번호가 없습니다.")
+}
+print(lottoRecord)
