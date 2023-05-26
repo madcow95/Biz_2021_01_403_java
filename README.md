@@ -73,6 +73,7 @@ https://medium.com/harrythegreat/swiftui-%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC-5%
 
 # 23/05/24
 https://velog.io/@hangem422/clean-code-comment -> 주석에 관한 내용
+bundle.*.js,out/**/*.*
 
 // 14916, 
 func readLine() -> String? {
