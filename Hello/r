@@ -25,6 +25,80 @@ KEY3 = '%3B'
 KEY4 = '%3B1%7C'
 KEY5 = '%3B%EC%A3%BC%EB%A7%90%'
 
+def Worker111(self):
+    _driver = self.chromeDriver
+
+    reservationDates = ['0616', '0619', '0620', '0621', '0622', '0626', '0627', '0628', '0629', '0624']
+    # reservationDates = ['0615']
+
+    url = 'https://reserv.bucheon.go.kr/site/main/lending/lendingDetail?lending_info_seq=195&inst_cate=01#none'
+
+    for kk in range(10000000000):
+        _driver.get(url)
+        for reservationDate in reservationDates:
+            try:
+                WebDriverWait(_driver, 10).until(
+                    EC.presence_of_element_located((By.ID, "tab2"))
+                )
+
+                script = ("document.getElementById('tab2').click();")
+
+                _driver.execute_script(script)
+
+                WebDriverWait(_driver, 10).until(
+                    EC.presence_of_element_located((By.ID, "calendarTable"))
+                )
+
+                ul_TimeElement = _driver.find_element(By.ID, reservationDate)
+
+                WebDriverWait(_driver, 10).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, "tm"))
+                )
+
+                li_TimeElements = ul_TimeElement.find_elements(By.CLASS_NAME, 'tm')
+
+                if reservationDate == '0624':
+                    find_liTag = li_TimeElements[len(li_TimeElements) - 5]
+                else:
+                    find_liTag = li_TimeElements[len(li_TimeElements) - 1]
+                # find_liTag = li_TimeElements[len(li_TimeElements) - 3]
+
+                aTag = find_liTag.find_element(By.TAG_NAME, 'a')
+
+                aTag.click()
+
+                WebDriverWait(_driver, 10).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, "right-btn"))
+                )
+
+                try:
+                    court = _driver.find_element(By.ID, 'coderest1')
+                except:
+                    court = _driver.find_element(By.ID, 'coderest2')
+
+                court.click()
+
+                script = ("document.getElementById('zip_cd').value = '07744';"
+                          "document.getElementById('addr').value = '서울특별시 강서구 곰달래로41길 50';"
+                          "document.getElementById('addr_detail').value = '203호 (화곡동)';"
+                          "document.getElementById('a1').click();"
+                          "document.getElementById('a2').click();"
+                          "document.getElementsByClassName('right-btn')[0].children[0].click()")
+
+                _driver.execute_script(script)
+
+                WebDriverWait(_driver, 10).until(EC.alert_is_present())
+
+                # 경고창을 클릭합니다.
+                Alert(_driver).accept()  # 확인 버튼 클릭
+                # Alert(_driver).dismiss()  # 취소 버튼 클릭
+
+                WebDriverWait(_driver, 10).until(EC.alert_is_present())
+                Alert(_driver).accept()
+            except:
+                continue
+
+
 def Worker12345(self, startCourt, endCourt, usedDate, startTime, endTime, teamName, userCount, purpose, isWeek):
     usedNum = 3
 
@@ -473,7 +547,7 @@ def Worker1234(self):
 
     courtUrls = [courtAUrl, courtBUrl, courtCUrl]
 
-    checkDays1 = ['cal_20230603', 'cal_20230606', 'cal_20230610', 'cal_20230617', 'cal_20230624', 'cal_20230604', 'cal_20230611', 'cal_20230618', 'cal_20230625']
+    checkDays1 = ['cal_20230606', 'cal_20230610', 'cal_20230617', 'cal_20230624', 'cal_20230604', 'cal_20230611', 'cal_20230618', 'cal_20230625']
     checkDays2 = []
     for i in range(30):
         checkDays2.append("cal_202306" + (str(i + 1)))
@@ -743,13 +817,22 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
                                 _driver.execute_script(script)
 
                                 wait = WebDriverWait(_driver, 10)
-                                # loadingBar = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'white_content')))
-
-                                # script = ("document.getElementsByClassName('btn btn-lg btn-secondary')[0].click()")
 
                                 script = (f"document.getElementById('phone_number').value='{phoneNum}';"
                                           "document.getElementsByClassName('btn btn-lg btn-secondary')[0].click()")
 
+                                _driver.execute_script(script)
+
+                                # 경고창을 클릭합니다.
+                                WebDriverWait(_driver, 10).until(EC.alert_is_present())
+                                Alert(_driver).accept()  # 확인 버튼 클릭
+
+                                # 텍스트 상자에 길이가 5이고 숫자인 값이 입력 될 때까지 대기합니다.
+                                textbox = wait.until(EC.element_to_be_clickable((By.ID, 'check_number')))
+                                wait.until(
+                                    lambda driver: len(textbox.get_attribute('value').strip()) == 6)
+
+                                script = ("document.getElementsByClassName('btn btn-lg btn-success me-3')[0].click();")
                                 _driver.execute_script(script)
 
                                 alert2 = WebDriverWait(_driver, 10).until(EC.alert_is_present())
@@ -783,7 +866,6 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
 
                                     WebDriverWait(_driver, 10).until(EC.alert_is_present())
                                     Alert(_driver).accept()  # 확인 버튼 클릭
-
                             courtNumberUp += 1
                         except:
                             _driver.switch_to.window(parent_window)
@@ -969,8 +1051,7 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
                             # 텍스트 상자에 길이가 5이고 숫자인 값이 입력 될 때까지 대기합니다.
                             textbox = wait.until(EC.element_to_be_clickable((By.ID, 'check_number')))
                             wait.until(
-                                lambda driver: len(textbox.get_attribute('value').strip()) == 6 and textbox.get_attribute(
-                                    'value').strip().isdigit())
+                                lambda driver: len(textbox.get_attribute('value').strip()) == 6)
 
                             # WebDriverWait(_driver, 10).until(EC.alert_is_present())
 
@@ -989,15 +1070,26 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
                                 textbox = wait.until(EC.element_to_be_clickable((By.ID, 'check_number')))
                                 wait.until(
                                     lambda driver: len(
-                                        textbox.get_attribute('value').strip()) == 6 and textbox.get_attribute(
-                                        'value').strip().isdigit())
+                                        textbox.get_attribute('value').strip()) == 6)
 
                                 script = (
                                     "document.getElementsByClassName('btn btn-lg btn-success me-3')[0].click();")
                                 _driver.execute_script(script)
 
-                                _driver.close()
-                                _driver.switch_to.window(parent_window)
+                                alert3 = WebDriverWait(_driver, 10).until(EC.alert_is_present())
+                                if alert3.text == '인증번호가 올바르지 않습니다':
+                                    _driver.close()
+                                    _driver.switch_to.window(parent_window)
+                                else:
+                                    Alert(_driver).accept()  # 확인 버튼 클릭
+
+                                    _driver.switch_to.window(parent_window)
+
+                                    script = ("document.getElementsByClassName('button action_write')[0].click();")
+                                    _driver.execute_script(script)
+
+                                    WebDriverWait(_driver, 10).until(EC.alert_is_present())
+                                    Alert(_driver).accept()  # 확인 버튼 클릭
                             else:
                                 Alert(_driver).accept()  # 확인 버튼 클릭
 
@@ -1008,13 +1100,17 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
 
                                 WebDriverWait(_driver, 10).until(EC.alert_is_present())
                                 Alert(_driver).accept()  # 확인 버튼 클릭
-                    except:
+                    except Exception as e:
+                        print('22')
+                        print(e)
                         _driver.switch_to.window(parent_window)
                 else:
                     return
             except (
             UnexpectedAlertPresentException, NoSuchElementException, JavascriptException, WebDriverException, IndexError) as e:
                 _driver.switch_to.window(parent_window)
+                print('11')
+                print(e)
                 pass
 
 def getSTimeFromTime(time):
@@ -1276,8 +1372,8 @@ def set_chrome_driver():
     chrome_options.add_argument("disable-infobars")
     chrome_options.add_argument("--disable-extensions")
 
-    # chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
-    chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9223")
+    chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
+    # chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9223")
     # chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9224")
     # chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9225")
     # chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9226")
@@ -1294,8 +1390,8 @@ def set_chrome_driver():
 class RunMacro:
     def __init__(self, parent):
         subprocess.Popen(
-            # r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\chrometemp1"')  # 디버거 크롬 구동
-            r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9223 --user-data-dir="C:\chrometemp2"')  # 디버거 크롬 구동
+            r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\chrometemp1"')  # 디버거 크롬 구동
+            # r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9223 --user-data-dir="C:\chrometemp2"')  # 디버거 크롬 구동
             # r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9224 --user-data-dir="C:\chrometemp3"')  # 디버거 크롬 구동
             # r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9225 --user-data-dir="C:\chrometemp4"')  # 디버거 크롬 구동
             # r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9226 --user-data-dir="C:\chrometemp5"')  # 디버거 크롬 구동
@@ -1367,9 +1463,9 @@ class RunMacro:
 
         try:
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-            # t1 = threading.Thread(target=Worker1234, args=(self,))
-            t1 = threading.Thread(target=Worker123, args=(
-                self, startCourt, endCourt, usedDate, startTime, endTime, teamName, userCount, purpose, isWeek))
+            t1 = threading.Thread(target=Worker111, args=(self,))
+            # t1 = threading.Thread(target=Worker123, args=(
+            #     self, startCourt, endCourt, usedDate, startTime, endTime, teamName, userCount, purpose, isWeek))
             t1.daemon = True
             t1.start()
         except Exception as e:
