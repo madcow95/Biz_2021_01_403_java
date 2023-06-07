@@ -9,14 +9,10 @@ import urllib3
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-import time
+
 import pyzbar.pyzbar as pyzbar
 import ssl
 from selenium.webdriver.common.alert import Alert
-import requests
-from bs4 import BeautifulSoup
-from selenium.webdriver.common.keys import Keys
-import json
 import csv
 
 KEY1 = '%3B%ED%8F%89%EC%9D%BC%'
@@ -24,627 +20,6 @@ KEY2 = '%ED%9A%8C%3B'
 KEY3 = '%3B'
 KEY4 = '%3B1%7C'
 KEY5 = '%3B%EC%A3%BC%EB%A7%90%'
-
-def Worker111(self):
-    _driver = self.chromeDriver
-
-    reservationDates = ['0616', '0619', '0620', '0621', '0622', '0626', '0627', '0628', '0629', '0624']
-    # reservationDates = ['0615']
-
-    url = 'https://reserv.bucheon.go.kr/site/main/lending/lendingDetail?lending_info_seq=195&inst_cate=01#none'
-
-    for kk in range(10000000000):
-        _driver.get(url)
-        for reservationDate in reservationDates:
-            try:
-                WebDriverWait(_driver, 10).until(
-                    EC.presence_of_element_located((By.ID, "tab2"))
-                )
-
-                script = ("document.getElementById('tab2').click();")
-
-                _driver.execute_script(script)
-
-                WebDriverWait(_driver, 10).until(
-                    EC.presence_of_element_located((By.ID, "calendarTable"))
-                )
-
-                ul_TimeElement = _driver.find_element(By.ID, reservationDate)
-
-                WebDriverWait(_driver, 10).until(
-                    EC.presence_of_element_located((By.CLASS_NAME, "tm"))
-                )
-
-                li_TimeElements = ul_TimeElement.find_elements(By.CLASS_NAME, 'tm')
-
-                if reservationDate == '0624':
-                    find_liTag = li_TimeElements[len(li_TimeElements) - 5]
-                else:
-                    find_liTag = li_TimeElements[len(li_TimeElements) - 1]
-                # find_liTag = li_TimeElements[len(li_TimeElements) - 3]
-
-                aTag = find_liTag.find_element(By.TAG_NAME, 'a')
-
-                aTag.click()
-
-                WebDriverWait(_driver, 10).until(
-                    EC.presence_of_element_located((By.CLASS_NAME, "right-btn"))
-                )
-
-                try:
-                    court = _driver.find_element(By.ID, 'coderest1')
-                except:
-                    court = _driver.find_element(By.ID, 'coderest2')
-
-                court.click()
-
-                script = ("document.getElementById('zip_cd').value = '07744';"
-                          "document.getElementById('addr').value = '서울특별시 강서구 곰달래로41길 50';"
-                          "document.getElementById('addr_detail').value = '203호 (화곡동)';"
-                          "document.getElementById('a1').click();"
-                          "document.getElementById('a2').click();"
-                          "document.getElementsByClassName('right-btn')[0].children[0].click()")
-
-                _driver.execute_script(script)
-
-                WebDriverWait(_driver, 10).until(EC.alert_is_present())
-
-                # 경고창을 클릭합니다.
-                Alert(_driver).accept()  # 확인 버튼 클릭
-                # Alert(_driver).dismiss()  # 취소 버튼 클릭
-
-                WebDriverWait(_driver, 10).until(EC.alert_is_present())
-                Alert(_driver).accept()
-            except:
-                continue
-
-
-def Worker12345(self, startCourt, endCourt, usedDate, startTime, endTime, teamName, userCount, purpose, isWeek):
-    usedNum = 3
-
-    idPwdObjects = [
-        {
-            'name': '이상근',
-            'id': 'tigerli3',
-            'pwd': 'tkd1031511!'
-        },
-        {
-            'id': 'mongmongi2',
-            'pwd': 'sujin123!'
-        },
-        {
-            'id': 'leetaewon94',
-            'pwd': '2648korea!'
-        },
-        {
-            'id': 'jullia7041',
-            'pwd': 'fjqmfjqm22!'
-        }
-    ]
-
-    with open('userInfos.txt', 'r', encoding='UTF8') as file:
-        file_content = file.read()
-
-    userInfos = json.loads(file_content)
-
-    selectedUserInfo = None
-
-    for userInfo in userInfos:
-        if userInfo['name'] == teamName:
-            selectedUserInfo = userInfo
-
-    if not selectedUserInfo:
-        selectedUserInfo = idPwdObjects[2]
-
-    print(selectedUserInfo)
-
-    login_url = 'https://www.ycs.or.kr/fmcs/133?referer=%2Ffmcs%2F132'
-
-    # 세션 객체 생성
-    session = requests.Session()
-
-    login_page = session.get(login_url, verify=False)
-
-    soup = BeautifulSoup(login_page.text, 'html.parser')
-    security_token = soup.find('input', {'name': 'SecurityToken'}).get('value')
-
-
-    # 로그인 폼 파싱
-    login_data = {
-        'SecurityToken': security_token,
-        'user_id': selectedUserInfo['id'],
-        'user_password': selectedUserInfo['pwd']
-    }
-
-    # 로그인 요청 보내기
-    response = session.post(login_url, params=login_data, verify=False)
-
-    # 로그인 성공 여부 확인
-    if response.status_code == 200:
-        print('로그인 성공')
-    else:
-        print('로그인 실패')
-
-    macroInfoList = self.macroInfoList
-
-    if str(startCourt) != str(endCourt):
-        for kk in range(10000000000):
-            courtNumberUp = int(startCourt)
-            while courtNumberUp < int(endCourt) + 1:
-                timeText = gettimeNo(macroInfoList, int(startTime), int(endTime), int(usedDate), int(courtNumberUp))
-                try:
-                    if self.isStart:
-                        try:
-                            if self.isStart:
-                                url = 'https://www.ycs.or.kr/fmcs/4'
-
-                                data = {
-                                    'action': 'write',
-                                    'comcd': 'YCS04',
-                                    'part_cd': '02',
-                                    'place_cd': str(courtNumberUp),
-                                    'time_no': timeText,
-                                    'rent_type': '1001',
-                                    'rent_date': str(usedDate),
-                                }
-
-                                response = session.post(url, params=data, verify=False)
-
-                                if response.status_code == 200:
-                                    print(response.text)
-                                    print(response.content)
-                                    soup = BeautifulSoup(response.text, 'html.parser')
-
-                                    security_token_input = soup.find('input', {'name': 'SecurityToken'})
-                                    security_token = security_token_input['value']
-
-                                    place_code_input = soup.find('input', {'name': 'place_code'})
-                                    place_code = place_code_input['value']
-
-                                    mem_no_input = soup.find('input', {'name': 'mem_no'})
-                                    mem_no = mem_no_input['value']
-
-                                    start_date_input = soup.find('input', {'name': 'start_date'})
-                                    start_date = start_date_input['value']
-
-                                    end_date_input = soup.find('input', {'name': 'end_date'})
-                                    end_date = end_date_input['value']
-
-                                    time_datas_input = soup.find('input', {'name': 'time_datas'})
-                                    time_datas = time_datas_input['value']
-
-                                    total_amount_input = soup.find('input', {'name': 'total_amount'})
-                                    total_amount = total_amount_input['value']
-
-                                    mem_nm_input = soup.find('input', {'name': 'mem_nm'})
-                                    mem_nm = mem_nm_input['value']
-
-                                    mobile_tel_input = soup.find('input', {'name': 'mobile_tel'})
-                                    mobile_tel = mobile_tel_input['value']
-
-                                url = "https://www.ycs.or.kr/fmcs/4?action=write_proc"
-
-                                headers = {
-                                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3; q=0.7",
-                                    "Accept-Encoding": "gzip, deflate, br",
-                                    "Accept-Language": "en-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
-                                    "Cache-Control": "no-cache",
-                                    "Connection": "keep-alive",
-                                    "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary9U2pEnbqCE0ZGdm3",
-                                    "Host": "www.ycs.or.kr",
-                                    "Origin": "https://www.ycs.or.kr",
-                                    "Pragma": "no-cache",
-                                    "Referer": "https://www.ycs.or.kr/fmcs/4",
-                                    "sec-ch-ua": "\"Chromium\";v=\"112\", \"Google Chrome\";v=\"112\", \"Not:A-Brand\";v=\"99\"",
-                                    "sec-ch-ua-mobile": "?0",
-                                    "sec-ch-ua-platform": "\"Windows\"",
-                                    "Sec-Fetch-Dest": "document",
-                                    "Sec-Fetch-Mode": "navigate",
-                                    "Sec-Fetch-Site": "same-origin",
-                                    "Sec-Fetch-User": "?1",
-                                    "Upgrade-Insecure-Requests": "1",
-                                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
-                                }
-
-                                data = {
-                                    'SecurityToken': security_token,
-                                    'type': '',
-                                    'company_code': 'YCS04',
-                                    'part_code': '02',
-                                    'place_code': place_code,
-                                    'guest_yn': 'N',
-                                    'mem_no': mem_no,
-                                    'team_no': '0',
-                                    'start_date': start_date,
-                                    'start_time': '',
-                                    'end_date': end_date,
-                                    'end_time': '',
-                                    'time_datas': time_datas,
-                                    'total_amount': total_amount,
-                                    'mem_nm': mem_nm,
-                                    'team_nm': '1',
-                                    'team_yn': 'N',
-                                    'users': selectedUserInfo['name'],
-                                    'mobile_tel': mobile_tel,
-                                    'tel': '',
-                                    'type_cd': '1001',
-                                    'title': '',
-                                    'purpose': str(purpose),
-                                    'attachfile_count': '1',
-                                    'attachfile': '(바이너리)',
-                                    'place_item_1_dc': '',
-                                    'agree_use': 'Y'
-                                }
-
-                                response2 = session.post(url, headers=headers, params=data, verify=False)
-
-                                if response2.status_code == 200:
-                                    print("요청이 성공하였습니다.")
-                                    courtNumberUp += 1
-                                else:
-                                    print("요청이 실패하였습니다.")
-                                    courtNumberUp += 1
-
-                        except:
-                            courtNumberUp += 1
-                            print('실패')
-                            pass
-                    else:
-                        return;
-                except:
-                    courtNumberUp += 1
-    else:
-        timeText = gettimeNo(macroInfoList, int(startTime), int(endTime), int(usedDate), int(startCourt))
-        for i in range(10000000000):
-            try:
-                if self.isStart:
-                    url = 'https://www.ycs.or.kr/fmcs/4'
-                    print(timeText)
-                    data = {
-                        'action': 'write',
-                        'comcd': 'YCS04',
-                        'part_cd': '02',
-                        'place_cd': str(startCourt),
-                        'time_no': timeText,
-                        'rent_type': '1001',
-                        'rent_date': str(usedDate),
-                    }
-
-                    response = session.post(url, params=data, verify=False)
-
-                    if response.status_code == 200:
-                        soup = BeautifulSoup(response.text, 'html.parser')
-
-                        security_token_input = soup.find('input', {'name': 'SecurityToken'})
-                        security_token = security_token_input['value']
-
-                        place_code_input = soup.find('input', {'name': 'place_code'})
-                        place_code = place_code_input['value']
-
-                        mem_no_input = soup.find('input', {'name': 'mem_no'})
-                        mem_no = mem_no_input['value']
-
-                        start_date_input = soup.find('input', {'name': 'start_date'})
-                        start_date = start_date_input['value']
-
-                        end_date_input = soup.find('input', {'name': 'end_date'})
-                        end_date = end_date_input['value']
-
-                        time_datas_input = soup.find('input', {'name': 'time_datas'})
-                        time_datas = time_datas_input['value']
-
-                        total_amount_input = soup.find('input', {'name': 'total_amount'})
-                        total_amount = total_amount_input['value']
-
-                        mem_nm_input = soup.find('input', {'name': 'mem_nm'})
-                        mem_nm = mem_nm_input['value']
-
-                        mobile_tel_input = soup.find('input', {'name': 'mobile_tel'})
-                        mobile_tel = mobile_tel_input['value']
-
-                    url = "https://www.ycs.or.kr/fmcs/4?action=write_proc"
-
-                    headers = {
-                        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3; q=0.7",
-                        "Accept-Encoding": "gzip, deflate, br",
-                        "Accept-Language": "en-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
-                        "Cache-Control": "no-cache",
-                        "Connection": "keep-alive",
-                        "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary9U2pEnbqCE0ZGdm3",
-                        "Host": "www.ycs.or.kr",
-                        "Origin": "https://www.ycs.or.kr",
-                        "Pragma": "no-cache",
-                        "Referer": "https://www.ycs.or.kr/fmcs/4",
-                        "sec-ch-ua": "\"Chromium\";v=\"112\", \"Google Chrome\";v=\"112\", \"Not:A-Brand\";v=\"99\"",
-                        "sec-ch-ua-mobile": "?0",
-                        "sec-ch-ua-platform": "\"Windows\"",
-                        "Sec-Fetch-Dest": "document",
-                        "Sec-Fetch-Mode": "navigate",
-                        "Sec-Fetch-Site": "same-origin",
-                        "Sec-Fetch-User": "?1",
-                        "Upgrade-Insecure-Requests": "1",
-                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
-                    }
-
-                    data = {
-                        'SecurityToken': security_token,
-                        'type': '',
-                        'company_code': 'YCS04',
-                        'part_code': '02',
-                        'place_code': place_code,
-                        'guest_yn': 'N',
-                        'mem_no': mem_no,
-                        'team_no': '0',
-                        'start_date': start_date,
-                        'start_time': '',
-                        'end_date': end_date,
-                        'end_time': '',
-                        'time_datas': time_datas,
-                        'total_amount': total_amount,
-                        'mem_nm': mem_nm,
-                        'team_nm': '1',
-                        'team_yn': 'N',
-                        'users': selectedUserInfo['name'],
-                        'mobile_tel': mobile_tel,
-                        'tel': '',
-                        'type_cd': '1001',
-                        'title': '',
-                        'purpose': str(purpose),
-                        'attachfile_count': '1',
-                        'attachfile': '(바이너리)',
-                        'place_item_1_dc': '',
-                        'agree_use': 'Y'
-                    }
-
-                    response2 = session.post(url, headers=headers, params=data, verify=False)
-
-                    if response2.status_code == 200:
-                        print("요청이 성공하였습니다.")
-                    else:
-                        print("요청이 실패하였습니다.")
-
-            except:
-                print('실패')
-                pass
-
-
-def Worker1234567(self):
-    _driver = self.chromeDriver
-
-    court1 = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S210224095950585838&code=T100&dCode=T108&sch_order=1&sch_choose_list=&sch_type=&sch_text=%EC%84%9C%EB%82%A8%EB%AC%BC&sch_recpt_begin_dt=&sch_recpt_end_dt=&sch_use_begin_dt=&sch_use_end_dt=&svc_prior=N&sch_reqst_value=';
-    court2 = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S210219092115226884&code=T100&dCode=T108&sch_order=1&sch_choose_list=&sch_type=&sch_text=%EC%84%9C%EB%82%A8%EB%AC%BC&sch_recpt_begin_dt=&sch_recpt_end_dt=&sch_use_begin_dt=&sch_use_end_dt=&svc_prior=N&sch_reqst_value=';
-    court3 = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S210219092313243896&code=T100&dCode=T108&sch_order=1&sch_choose_list=&sch_type=&sch_text=%EC%84%9C%EB%82%A8%EB%AC%BC&sch_recpt_begin_dt=&sch_recpt_end_dt=&sch_use_begin_dt=&sch_use_end_dt=&svc_prior=N&sch_reqst_value=';
-    court4 = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S210219091826906010&code=T100&dCode=T108&sch_order=1&sch_choose_list=&sch_type=&sch_text=%EC%84%9C%EB%82%A8%EB%AC%BC&sch_recpt_begin_dt=&sch_recpt_end_dt=&sch_use_begin_dt=&sch_use_end_dt=&svc_prior=N&sch_reqst_value=';
-    court5 = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S210224094844227739&code=T100&dCode=T108&sch_order=1&sch_choose_list=&sch_type=&sch_text=%EC%84%9C%EB%82%A8%EB%AC%BC&sch_recpt_begin_dt=&sch_recpt_end_dt=&sch_use_begin_dt=&sch_use_end_dt=&svc_prior=N&sch_reqst_value=';
-    court6 = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S210219092004901944&code=T100&dCode=T108&sch_order=1&sch_choose_list=&sch_type=&sch_text=%EC%84%9C%EB%82%A8%EB%AC%BC&sch_recpt_begin_dt=&sch_recpt_end_dt=&sch_use_begin_dt=&sch_use_end_dt=&svc_prior=N&sch_reqst_value=';
-
-    courtUrls = [court1, court2, court3, court4, court5, court6]
-
-    checkDays1 = ['cal_20230524']
-
-    # checkDays = ['cal_20230511']
-    count = 0
-    for i in range(10000000000):
-        if self.isStart:
-            _driver.get(courtUrls[count])
-
-            WebDriverWait(_driver, 10).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "pop_x"))
-            )
-
-            _driver.find_elements_by_class_name('pop_x')[0].click()
-
-            if count == 5:
-                count = 0
-            else:
-                count += 1
-
-            WebDriverWait(_driver, 10).until(EC.element_to_be_clickable((By.ID, 'calendar')))
-
-            for checkDay in checkDays1:
-                try:
-                    aTagElement = _driver.find_element_by_id(checkDay)
-                    if aTagElement.get_attribute("title") == '예약가능':
-                        print(aTagElement)
-
-                        aTagElement.send_keys(Keys.ENTER)
-
-                        script = ("document.getElementsByClassName('common_btn blue')[0].click();")
-
-                        _driver.execute_script(script)
-
-                        WebDriverWait(_driver, 10).until(
-                            EC.presence_of_element_located((By.ID, "useUnit"))
-                        )
-
-                        ul_TimeElement = _driver.find_element_by_id('useUnit')
-
-                        li_TimeElements = ul_TimeElement.find_elements_by_tag_name('li')
-
-                        timeDatas = []
-                        for li_TimeElement in li_TimeElements:
-                            if li_TimeElement.text.find('18:00~') > -1 or li_TimeElement.text.find('19:00~') > -1:
-                                if li_TimeElement.get_attribute('class') == 'tab-all':
-                                    timeDatas.append(li_TimeElement)
-
-                        if len(timeDatas) == 2:
-                            for timeData in timeDatas:
-                                timeData.click()
-
-                            fee_eachDivs = _driver.find_elements_by_class_name('fee_each')
-
-                            for fee_eachDiv in fee_eachDivs:
-                                if fee_eachDiv.find_elements_by_class_name('tit')[0].text == '일반':
-                                    fee_eachDiv.find_elements_by_class_name('user_plus')[0].click()
-                                    break
-
-                            script = ("document.getElementById('chk_agree1').click();"
-                                      "document.getElementById('chk_agree2').click();")
-
-                            _driver.execute_script(script)
-
-                            btn_inps = _driver.find_elements_by_class_name('btn_inp')
-
-                            for btn_inp in btn_inps:
-                                if btn_inp.text == '인증번호발송':
-                                    btn_verification = btn_inp
-                                elif btn_inp.text == '확인':
-                                    btn_Ok = btn_inp
-
-                            btn_verification.click()
-
-                            _driver.switch_to.window(_driver.current_window_handle)
-
-                            WebDriverWait(_driver, 10).until(EC.alert_is_present())
-                            alert = Alert(_driver)
-                            alert.accept()
-
-                            script = ("document.getElementById('form_cert').focus();")
-                            _driver.execute_script(script)
-
-                            wait = WebDriverWait(_driver, 10)
-                            textbox = wait.until(EC.element_to_be_clickable((By.ID, 'form_cert')))
-
-                            # 텍스트 상자에 길이가 5이고 숫자인 값이 입력 될 때까지 대기합니다.
-                            wait.until(lambda driver: len(textbox.get_attribute('value').strip()) == 5 and textbox.get_attribute(
-                                'value').strip().isdigit())
-
-                            btn_Ok.click()
-
-                            time.sleep(0.5)
-
-                            btnTag = _driver.find_elements_by_class_name("common_btn blue")
-
-                            if len(btnTag) > 0:
-                                btnTag.click()
-                            else:
-                                ul_element = _driver.find_element_by_class_name(
-                                    "book_btn_box")  # class name이 "book_btn_box"인 ul 요소 가져오기
-                                active_li_element = ul_element.find_element_by_css_selector(
-                                    "li.active")  # 하위 li 요소 중 class가 "active"인 li 요소 가져오기
-
-                                active_li_element.find_elements_by_tag_name('button')[0].click()
-
-                            # Alert의 메시지 가져오기
-                            WebDriverWait(_driver, 10).until(EC.alert_is_present())
-                            alert = Alert(_driver)
-                            alert.accept()
-                except Exception as e:
-                    print(e)
-                    pass
-        else:
-            return;
-
-
-def Worker1234(self):
-    _driver = self.chromeDriver
-
-    courtAUrl = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S230516153821757751&code=T100&dCode=T108&sch_order=1&sch_choose_list=&sch_type=&sch_text=%EA%B3%84%EB%82%A8&sch_recpt_begin_dt=&sch_recpt_end_dt=&sch_use_begin_dt=&sch_use_end_dt=&svc_prior=N&sch_reqst_value='
-    courtBUrl = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S230516152328763590&code=T100&dCode=T108&sch_order=1&sch_choose_list=&sch_type=&sch_text=%EA%B3%84%EB%82%A8&sch_recpt_begin_dt=&sch_recpt_end_dt=&sch_use_begin_dt=&sch_use_end_dt=&svc_prior=N&sch_reqst_value='
-    courtCUrl = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S230516142700183687&code=T100&dCode=T108&sch_order=1&sch_choose_list=&sch_type=&sch_text=%EA%B3%84%EB%82%A8&sch_recpt_begin_dt=&sch_recpt_end_dt=&sch_use_begin_dt=&sch_use_end_dt=&svc_prior=N&sch_reqst_value='
-
-    testCourtUrl = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S230411172927884900&code=T100&dCode=T108&sch_order=1&sch_choose_list=&sch_type=&sch_text=%EA%B3%84%EB%82%A8&sch_recpt_begin_dt=&sch_recpt_end_dt=&sch_use_begin_dt=&sch_use_end_dt=&sch_svc_sttus=R403&svc_prior=N&sch_reqst_value='
-
-    courtUrls = [courtAUrl, courtBUrl, courtCUrl]
-
-    checkDays1 = ['cal_20230606', 'cal_20230610', 'cal_20230617', 'cal_20230624', 'cal_20230604', 'cal_20230611', 'cal_20230618', 'cal_20230625']
-    checkDays2 = []
-    for i in range(30):
-        checkDays2.append("cal_202306" + (str(i + 1)))
-
-    # checkDays = ['cal_20230511']
-    count = 0
-    for i in range(10000000000):
-        if self.isStart:
-            _driver.get(courtUrls[count])
-
-            WebDriverWait(_driver, 10).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "pop_x"))
-            )
-
-            script = ("document.getElementsByClassName('pop_x')[0].click();")
-            _driver.execute_script(script)
-            if count == 2:
-                checkDays = checkDays1
-            else:
-                checkDays = checkDays2
-
-            if count == 2:
-                count = 0
-            else:
-                count += 1
-
-            WebDriverWait(_driver, 10).until(EC.element_to_be_clickable((By.ID, 'calendar')))
-
-            for checkDay in checkDays:
-                try:
-                    aTagElement = _driver.find_element_by_id(checkDay)
-                    if aTagElement.get_attribute("title") == '예약가능':
-                        aTagElement.click()
-                        script = ("document.getElementsByClassName('common_btn blue')[0].click();")
-
-                        _driver.execute_script(script)
-
-                        WebDriverWait(_driver, 10).until(
-                            EC.presence_of_element_located((By.CLASS_NAME, "cal_con_box"))
-                        )
-
-                        ul_element = _driver.find_element_by_id("useUnit")
-                        active_li_element = ul_element.find_element_by_css_selector(".tab-all")
-
-                        print(active_li_element)
-                        if active_li_element:
-                            active_li_element.click()
-
-                            script = ("document.getElementsByClassName('user_plus')[0].onclick();"
-                                      "document.getElementById('chk_agree1').click();"
-                                      "document.getElementById('chk_agree2').click();"
-                                      "document.getElementsByClassName('btn_inp')[0].click();")
-
-                            _driver.execute_script(script)
-
-                            WebDriverWait(_driver, 10).until(EC.alert_is_present())
-                            alert = Alert(_driver)
-                            alert.accept()
-
-                            script = ("document.getElementById('form_cert').focus();")
-                            _driver.execute_script(script)
-
-                            _driver.switch_to.window(_driver.current_window_handle)
-
-                            wait = WebDriverWait(_driver, 10)
-                            textbox = wait.until(EC.element_to_be_clickable((By.ID, 'form_cert')))
-
-                            # 텍스트 상자에 길이가 5이고 숫자인 값이 입력 될 때까지 대기합니다.
-                            wait.until(lambda driver: len(textbox.get_attribute('value').strip()) == 5 and textbox.get_attribute(
-                                'value').strip().isdigit())
-
-                            script = ("document.getElementsByClassName('btn_inp')[1].click();")
-                            _driver.execute_script(script)
-
-                            time.sleep(0.5)
-
-                            btnTag = _driver.find_elements_by_class_name("common_btn blue")
-
-                            if len(btnTag) > 0:
-                                btnTag.click()
-                            else:
-                                ul_element = _driver.find_element_by_class_name(
-                                    "book_btn_box")  # class name이 "book_btn_box"인 ul 요소 가져오기
-                                active_li_element = ul_element.find_element_by_css_selector(
-                                    "li.active")  # 하위 li 요소 중 class가 "active"인 li 요소 가져오기
-
-                                active_li_element.click()
-
-                            # Alert의 메시지 가져오기
-                            WebDriverWait(_driver, 10).until(EC.alert_is_present())
-                            alert = Alert(_driver)
-                            alert.accept()
-                except:
-                    pass
-        else:
-            return;
-
 
 def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName, userCount, purpose, isWeek):
     ssl._create_default_https_context = ssl._create_unverified_context
@@ -723,11 +98,13 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
                         for obj in decodedObjects:
                             qrcodeData = obj.data.decode("utf-8").split(":")[1].strip()
 
-                        script = (f"document.getElementById('qr_number').value='{qrcodeData}';"
-                                  "document.getElementsByClassName('btn btn-lg btn-success me-3')[1].click();")
-
                         try:
+                            script = (f"document.getElementById('qr_number').value='{qrcodeData}';")
                             _driver.execute_script(script)
+
+                            verificationButton = _driver.find_element(By.CSS_SELECTOR,
+                                                                      '#container_qr > div.mt-2 > div.button_contents.mt-4 > div > div.col-3 > button')
+                            verificationButton.click()
 
                             # 경고창을 띄웁니다.
                             # alert = _driver.switch_to.alert
@@ -755,14 +132,14 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
                                 EC.presence_of_element_located((By.ID, "team_nm"))
                             )
 
-                            time_datas = _driver.find_element_by_id("time_datas")
+                            time_datas = _driver.find_element(By.ID, 'time_datas')
                             time_datsValue = time_datas.get_attribute('value')
 
                             if len(time_datsValue.split('|')) == 1:
                                 courtNumberUp += 1
                                 continue
 
-                            phoneNumberEle = _driver.find_element_by_id("mobile_tel")
+                            phoneNumberEle = _driver.find_element(By.ID, 'mobile_tel')
 
                             # phoneNum = phoneNumberEle.get_attribute("value").replace('-', '')
                             phoneNum = '01063327323'
@@ -867,7 +244,9 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
                                     WebDriverWait(_driver, 10).until(EC.alert_is_present())
                                     Alert(_driver).accept()  # 확인 버튼 클릭
                             courtNumberUp += 1
-                        except:
+                        except Exception as e:
+                            print('1')
+                            print(e)
                             _driver.switch_to.window(parent_window)
                             courtNumberUp += 1
                     else:
@@ -875,6 +254,8 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
                 except (
                         UnexpectedAlertPresentException, NoSuchElementException, JavascriptException, WebDriverException,
                         IndexError) as e:
+                    print("2")
+                    print(e)
                     courtNumberUp += 1
                     pass
     else:
@@ -943,11 +324,12 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
                     for obj in decodedObjects:
                         qrcodeData = obj.data.decode("utf-8").split(":")[1].strip()
 
-                    script = (f"document.getElementById('qr_number').value='{qrcodeData}';"
-                              "document.querySelector('#container_qr > div.mt-2 > div.button_contents.mt-4 > div > div.col-3 > button').click();")
-
                     try:
+                        script = (f"document.getElementById('qr_number').value='{qrcodeData}';")
                         _driver.execute_script(script)
+
+                        verificationButton = _driver.find_element(By.CSS_SELECTOR, '#container_qr > div.mt-2 > div.button_contents.mt-4 > div > div.col-3 > button')
+                        verificationButton.click()
 
                         # 경고창을 띄웁니다.
                         # alert = _driver.switch_to.alert
@@ -958,11 +340,11 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
 
                         _driver.switch_to.window(parent_window)
 
-                        script = ("document.getElementsByClassName('action_application')[0].click();")
-
                         WebDriverWait(_driver, 10).until(
                             EC.presence_of_element_located((By.CLASS_NAME, "action_application"))
                         )
+
+                        script = ("document.getElementsByClassName('action_application')[0].click();")
 
                         _driver.execute_script(script)
 
@@ -975,13 +357,13 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
                             EC.presence_of_element_located((By.ID, "team_nm"))
                         )
 
-                        time_datas = _driver.find_element_by_id("time_datas")
+                        time_datas = _driver.find_element(By.ID, 'time_datas')
                         time_datsValue = time_datas.get_attribute('value')
 
                         if len(time_datsValue.split('|')) == 1:
                             continue
 
-                        phoneNumberEle = _driver.find_element_by_id("mobile_tel")
+                        phoneNumberEle = _driver.find_element(By.ID, 'mobile_tel')
 
                         # phoneNum = phoneNumberEle.get_attribute("value").replace('-', '')
                         phoneNum = '01063327323'
@@ -1053,8 +435,6 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
                             wait.until(
                                 lambda driver: len(textbox.get_attribute('value').strip()) == 6)
 
-                            # WebDriverWait(_driver, 10).until(EC.alert_is_present())
-
                             script = ("document.getElementsByClassName('btn btn-lg btn-success me-3')[0].click();")
                             _driver.execute_script(script)
 
@@ -1100,80 +480,14 @@ def Worker123(self, startCourt, endCourt, usedDate, startTime, endTime, teamName
 
                                 WebDriverWait(_driver, 10).until(EC.alert_is_present())
                                 Alert(_driver).accept()  # 확인 버튼 클릭
-                    except Exception as e:
-                        print('22')
-                        print(e)
+                    except:
                         _driver.switch_to.window(parent_window)
                 else:
                     return
             except (
             UnexpectedAlertPresentException, NoSuchElementException, JavascriptException, WebDriverException, IndexError) as e:
                 _driver.switch_to.window(parent_window)
-                print('11')
-                print(e)
                 pass
-
-def getSTimeFromTime(time):
-    if time > 9:
-        sTime = str(time) + '00'
-    else:
-        sTime = '0' + str(time) + '00'
-
-    return sTime
-
-def gettimeNo(macroInfoList, rStartTime, rEndTime, rUsedDate, rCourtNum):
-    # 시간 [9,10,11,12]
-    startTimeArr = []
-    for i in range(rStartTime, rEndTime):
-        startTimeArr.append(i)
-
-    res = ''
-    # 658;평일 8회;1600;1700;1|659;평일 9회;1700;1800;1
-    # 658;평일 7회;1600;1700;1|659;평일 8회;1700;1800;1
-    for startTime in startTimeArr:
-        timeText = ''
-        if int(startTime) == 9:
-            timeText = '0' + str(startTime) + '00;' + str(startTime + 1) + '00;'
-        else:
-            timeText = str(startTime) + '00;' + str(startTime + 1) + '00;'
-
-        if int(rCourtNum) == 9 or int(rCourtNum) == 12 or int(rCourtNum) == 14:
-            res += macroInfoList[int(rCourtNum)][startTime - 8] + ';평일 ' + str(startTime - 5) + '회;' + timeText + '1|'
-        else:
-            res += macroInfoList[int(rCourtNum)][startTime - 8] + ';평일 ' + str(startTime - 8) + '회;' + timeText + '1|'
-
-    return res[:-1]
-
-def getUrlWeekday(macroInfoList, rStartTime, rEndTime, rUsedDate, rCourtNum):
-    # 시간 [9,10,11,12]
-    startTimeArr = []
-    for i in range(rStartTime, rEndTime):
-        startTimeArr.append(i)
-
-    baseUrl = 'https://www.ycs.or.kr/fmcs/4?facilities_type=T&center=YCS04&part=02'
-
-    baseDate = '&base_date=' + rUsedDate
-
-    place = '&place=' + rCourtNum
-
-    place_cd = '&place_cd=' + rCourtNum
-
-    time_no = '&time_no='
-    for startTime in startTimeArr:
-        time_no += macroInfoList[int(rCourtNum)][startTime - 8] + KEY1
-        time_no += macroInfoList[19][startTime - 8] + KEY2
-        time_no += getSTimeFromTime(startTime) + KEY3
-        time_no += getSTimeFromTime(startTime + 1) + KEY4
-
-    time_no = time_no[:time_no.rindex(KEY4)] + '%3B1'
-
-    fullUrl = baseUrl + baseDate + '&action=write' + place + '&comcd=YCS04&part_cd=02' + place_cd + time_no + '&rent_type=1001&rent_date=' + rUsedDate
-
-    return fullUrl
-
-
-def getMockdongUrl(rDate, rCourtNum):
-    return 'https://www.ycs.or.kr/fmcs/4?facilities_type=L&base_date=' + rDate + '&rent_type=1001&center=YCS04&part=02&place=' + rCourtNum + '#regist_list'
 
 def getCheckBoxIds(rIsWeek, rCourtNum, rStartTime, rEndTime):
     checkBoxIds = []
@@ -1209,162 +523,6 @@ def getCheckBoxIds(rIsWeek, rCourtNum, rStartTime, rEndTime):
 
     return checkBoxIds
 
-def getUrlWeekend(macroInfoList, rStartTime, rEndTime, rUsedDate, rCourtNum):
-    # 시간 [9,11,13,15,17,19,21]
-    #      1  2  3 4 5   6 7
-    startTimeArr = []
-
-    if rEndTime == 22:
-        startTimeArr = [19, 21]
-    else:
-        if rStartTime == rEndTime - 2:
-            startTimeArr = [rStartTime]
-        else:
-            startTimeArr = [rStartTime, rEndTime - 2]
-
-    baseUrl = 'https://www.ycs.or.kr/fmcs/4?facilities_type=T&center=YCS04&part=02'
-
-    baseDate = '&base_date=' + rUsedDate
-
-    place = '&place=' + rCourtNum
-
-    place_cd = '&place_cd=' + rCourtNum
-
-    time_no = '&time_no='
-    tttt = 0
-    st = 0
-    et = 0
-    for startTime in startTimeArr:
-        if startTime == 9:
-            tttt = 1
-            st = 9
-            et = 11
-        elif startTime == 11:
-            tttt = 2
-            st = 11
-            et = 13
-        elif startTime == 13:
-            tttt = 3
-            st = 13
-            et = 15
-        elif startTime == 15:
-            tttt = 4
-            st = 15
-            et = 17
-        elif startTime == 17:
-            tttt = 5
-            st = 17
-            et = 19
-        elif startTime == 19:
-            tttt = 6
-            st = 19
-            et = 21
-        elif startTime == 21:
-            tttt = 7
-            st = 21
-            et = 22
-
-        time_no += macroInfoList[int(rCourtNum)][tttt] + KEY5
-        time_no += macroInfoList[19][tttt] + KEY2
-        time_no += getSTimeFromTime(st) + KEY3
-        time_no += getSTimeFromTime(et) + KEY4
-
-    time_no = time_no[:time_no.rindex(KEY4)] + '%3B1'
-
-    fullUrl = baseUrl + baseDate + '&action=write' + place + '&comcd=YCS04&part_cd=02' + place_cd + time_no + '&rent_type=1001&rent_date=' + rUsedDate
-
-    return fullUrl
-
-def rentCourt(self, rUsedDate, rCourtNum, rStartTime, rEndTime, rTeamName,
-              rUserCount, rPurpose, rIsWeek):
-    rChromeDriver = self.chromeDriver
-
-    script = (f"document.getElementById('team_nm').value='{rTeamName}';"
-              f"document.getElementById('users').value={rUserCount};"
-              "document.getElementById('tel').value = '';"
-              f"document.getElementById('purpose').value = '{rPurpose}';"
-              "document.getElementById('writeForm').onsubmit = true;"
-              "document.getElementById('agree_use1').checked = true;")
-    rChromeDriver.execute_script(script)
-
-    rChromeDriver.implicitly_wait(5)
-    script = ("document.getElementsByClassName('button action_write')[0].click();")
-
-    rChromeDriver.execute_script(script)
-    # rChromeDriver.execute_script(''.join(lists));
-
-
-
-def rentCourt2(self, rUsedDate, rCourtNum, rStartTime, rEndTime, rTeamName,
-              rUserCount, rPurpose, rIsWeek):
-    rChromeDriver = self.chromeDriver
-
-    if not rIsWeek:
-        url = getUrlWeekday(self.macroInfoList, rStartTime, rEndTime, rUsedDate, rCourtNum)
-    else:
-        url = getUrlWeekend(self.macroInfoList, rStartTime, rEndTime, rUsedDate, rCourtNum)
-
-    self.chromeDriver.get(url)
-
-    script = (f"document.getElementById('team_nm').value='{rTeamName}';"
-              f"document.getElementById('users').value={rUserCount};"
-              "document.getElementById('tel').value = '';"
-              f"document.getElementById('purpose').value = '{rPurpose}';"
-              "document.getElementById('writeForm').onsubmit = true;"
-              "document.getElementById('agree_use1').checked = true;"
-              "document.getElementsByClassName('button action_write')[0].click();")
-
-    rChromeDriver.execute_script(script)
-
-    rChromeDriver.implicitly_wait(5)
-    script = ("document.getElementsByClassName('button action_write')[0].click();")
-
-    rChromeDriver.execute_script(script)
-    # rChromeDriver.execute_script(''.join(lists));
-
-def getCheckCourtNums(startTime, endTime, courtNum, isWeek):
-    # 체크해야 하는 번호
-    checkCourtNumArr = []
-
-    icourtNum = int(courtNum)
-    initStartTime = 9
-
-    # 빨간날 인 경우
-    if isWeek:
-        if endTime == 22:
-            checkCount = (endTime - startTime + 1) / 2
-        else:
-            checkCount = (endTime - startTime) / 2
-
-        # 조기 존재
-        if icourtNum == 9 or icourtNum == 12 or icourtNum == 14:
-            startCourtNum = 3
-            if startTime - initStartTime > 0:
-                startCourtNum = startCourtNum + (startTime - initStartTime) / 2
-        else:
-            startCourtNum = 0
-            if startTime - initStartTime > 0:
-                startCourtNum = startCourtNum + (startTime - initStartTime) / 2
-    # 빨간날 아닌 경우
-    else:
-        checkCount = endTime - startTime
-
-        # 조기 존재
-        if icourtNum == 9 or icourtNum == 12 or icourtNum == 14:
-            startCourtNum = 3
-            if startTime - initStartTime > 0:
-                startCourtNum = startCourtNum + (startTime - initStartTime)
-        else:
-            startCourtNum = 0
-            if startTime - initStartTime > 0:
-                startCourtNum = startCourtNum + (startTime - initStartTime)
-
-    for i in range(int(checkCount)):
-        checkCourtNumArr.append(str(startCourtNum + i))
-
-    return checkCourtNumArr
-
-
 def set_chrome_driver():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('headless')
@@ -1372,9 +530,9 @@ def set_chrome_driver():
     chrome_options.add_argument("disable-infobars")
     chrome_options.add_argument("--disable-extensions")
 
-    chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
+    # chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
     # chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9223")
-    # chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9224")
+    chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9224")
     # chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9225")
     # chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9226")
 
@@ -1390,9 +548,9 @@ def set_chrome_driver():
 class RunMacro:
     def __init__(self, parent):
         subprocess.Popen(
-            r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\chrometemp1"')  # 디버거 크롬 구동
+            # r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\chrometemp1"')  # 디버거 크롬 구동
             # r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9223 --user-data-dir="C:\chrometemp2"')  # 디버거 크롬 구동
-            # r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9224 --user-data-dir="C:\chrometemp3"')  # 디버거 크롬 구동
+            r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9224 --user-data-dir="C:\chrometemp3"')  # 디버거 크롬 구동
             # r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9225 --user-data-dir="C:\chrometemp4"')  # 디버거 크롬 구동
             # r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9226 --user-data-dir="C:\chrometemp5"')  # 디버거 크롬 구동
 
@@ -1402,33 +560,11 @@ class RunMacro:
         self.macroInfoList = None
 
     def moveToLoginPage(self):
-        rPska = "https://yeyak.seoul.go.kr/web/loginForm.do"
         loginPagePath = 'https://www.ycs.or.kr/fmcs/133?referer=https%3A%2F%2Fwww.ycs.or.kr%2Ffmcs%2F1'
         self.chromeDriver.get(loginPagePath)
 
     def startMacro(self):
-        # self.parent.setLog("예약 시작")
         self.isStart = True
-        # isWeek = self.parent.isWeek
-        #
-        # if isWeek:
-        #     with open('macroDatasWeekEnd.csv', "r", encoding='utf-8-sig') as f:
-        #         reader = csv.reader(f)
-        #         macroInfoList = list(reader)
-        #         self.macroInfoList = macroInfoList
-        # else:
-        #     with open('macroDatasWeekDay.csv', "r", encoding='utf-8-sig') as f:
-        #         reader = csv.reader(f)
-        #         macroInfoList = list(reader)
-        #         self.macroInfoList = macroInfoList
-        #
-        # try:
-        #     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        #     t1 = threading.Thread(target=Worker12345, args=(self, 1))
-        #     t1.daemon = True
-        #     t1.start()
-        # except Exception as e:
-        #     pass
 
         # 대표자
         teamName = self.parent.le_Team.text()
@@ -1463,9 +599,9 @@ class RunMacro:
 
         try:
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-            t1 = threading.Thread(target=Worker111, args=(self,))
-            # t1 = threading.Thread(target=Worker123, args=(
-            #     self, startCourt, endCourt, usedDate, startTime, endTime, teamName, userCount, purpose, isWeek))
+
+            t1 = threading.Thread(target=Worker123, args=(
+                self, startCourt, endCourt, usedDate, startTime, endTime, teamName, userCount, purpose, isWeek))
             t1.daemon = True
             t1.start()
         except Exception as e:
